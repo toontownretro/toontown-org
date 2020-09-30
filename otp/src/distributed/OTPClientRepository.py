@@ -8,7 +8,6 @@ import os
 
 
 from pandac.PandaModules import *
-from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from otp.distributed.OtpDoGlobals import *
 
@@ -47,6 +46,7 @@ from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLauncherGlobals
 from otp.uberdog import OtpAvatarManager
 from otp.distributed import OtpDoGlobals
+from otp.distributed.TelemetryLimiter import TelemetryLimiter
 from otp.ai.GarbageLeakServerEventAggregator import GarbageLeakServerEventAggregator
 
 from PotentialAvatar import PotentialAvatar
@@ -257,7 +257,7 @@ class OTPClientRepository(ClientRepositoryBase):
         # This value comes in from the server
         self.secretChatAllowed = base.config.GetBool("allow-secret-chat", 0)
         self.openChatAllowed = base.config.GetBool("allow-open-chat", 0)
-        
+
         # This value comes in from the webAcctParams
         self.secretChatNeedsParentPassword = (
             base.config.GetBool("secret-chat-needs-parent-password", 0)
@@ -1213,12 +1213,12 @@ class OTPClientRepository(ClientRepositoryBase):
             # That probably means the disconnect didn't come from the
             # server, but from some other connectivity problem.
             message = OTPLocalizer.CRLostConnection
-            
+
         # some reasons don't want a reconnect option
         reconnect = 1
         if self.bootedIndex in (152,127):
             reconnect = 0
-            
+
         #report disconnect to launcher for use in exit codes
         self.launcher.setDisconnectDetails(self.bootedIndex, message)
 
@@ -1712,7 +1712,7 @@ class OTPClientRepository(ClientRepositoryBase):
            configIsToday("allow-unclean-exit"):
             assert self.notify.warning("Not enforcing clean exit.")
             return
-        
+
         leakedTasks = self.detectLeakedTasks(okTasks)
         leakedEvents = self.detectLeakedEvents(okEvents)
         leakedIvals = self.detectLeakedIntervals()
@@ -1742,7 +1742,7 @@ class OTPClientRepository(ClientRepositoryBase):
             if base.config.GetBool("direct-gui-edit", 0):
                 logFunc("There are leaks: %s tasks, %s events, %s ivals, %s garbage cycles\nLeaked Events may be due to direct gui editing" %
                         (leakedTasks, leakedEvents, leakedIvals, leakedGarbage))
-            else:        
+            else:
                 logFunc("There are leaks: %s tasks, %s events, %s ivals, %s garbage cycles" %
                         (leakedTasks, leakedEvents, leakedIvals, leakedGarbage))
             if allowExit:
@@ -1752,7 +1752,7 @@ class OTPClientRepository(ClientRepositoryBase):
         else:
             self.notify.info("There are no leaks detected.")
 
-    def detectLeakedGarbage(self, callback=None): 
+    def detectLeakedGarbage(self, callback=None):
         if not __debug__:
             return 0
         self.notify.info('checking for leaked garbage...')
@@ -2100,7 +2100,7 @@ class OTPClientRepository(ClientRepositoryBase):
             pyc = HashVal()
             if not __dev__:
                 self.hashFiles(pyc)
-            
+
             self.timeManager.d_setSignature(self.userSignature, h.asBin(),
                                             pyc.asBin())
             self.timeManager.sendCpuInfo()
@@ -2173,7 +2173,7 @@ class OTPClientRepository(ClientRepositoryBase):
     def removeShardInterest(self, callback, task=None):
         self._removeCurrentShardInterest(
             Functor(self._removeShardInterestComplete, callback))
-    
+
     @report(types = ['args', 'deltaStamp'], dConfigParam = 'teleport')
     def _removeShardInterestComplete(self, callback):
         # We've removed interest in the current shard. That constitutes
@@ -2510,7 +2510,7 @@ class OTPClientRepository(ClientRepositoryBase):
 
     def setIsPaid(self, isPaid):
         assert self.notify.debugStateCall(self, 'loginFSM', 'gameFSM')
-        self.__isPaid=isPaid 
+        self.__isPaid=isPaid
 
     def allowFreeNames(self):
         assert self.notify.debugStateCall(self, 'loginFSM', 'gameFSM')
@@ -2526,14 +2526,14 @@ class OTPClientRepository(ClientRepositoryBase):
         assert self.notify.debugStateCall(self, 'loginFSM', 'gameFSM')
         return (self.secretChatAllowed or \
                (self.productName == "Terra-DMC" and self.isBlue() and self.secretChatAllowed))
-               
+
     def allowWhiteListChat(self):
         if hasattr(self,'whiteListChatEnabled') and self.whiteListChatEnabled:
             return True
         else:
             return False
-            
-               
+
+
     def allowAnyTypedChat(self):
         if self.allowSecretChat() or self.allowWhiteListChat() or self.allowOpenChat():
             return True
@@ -2663,7 +2663,7 @@ class OTPClientRepository(ClientRepositoryBase):
                 list.append(
                         (s.doId, s.name, s.avatarCount,
                         s.newAvatarCount))
-                
+
         return list
 
 
@@ -3010,11 +3010,11 @@ class OTPClientRepository(ClientRepositoryBase):
     def sendWishNameAnonymous(self, name):
         # use this to test a type-a-name submission without needing an avatar to test it on
         self.sendWishName(0, name)
-    
+
     def getWishNameResultMsg(self):
         # handler must accept args [WishNameResult, avId, name]
         return 'OTPCR.wishNameResult'
-        
+
     def gotWishnameResponse(self, di):
         avId = di.getUint32()
         returnCode = di.getUint16()
@@ -3059,7 +3059,7 @@ class OTPClientRepository(ClientRepositoryBase):
             self.handleObjectLocation(di)
         else:
             ClientRepositoryBase.replayDeferredGenerate(self, msgType, extra)
-            
+
 
     @exceptionLogged(append=False)
     def handleDatagram(self, di):
@@ -3081,7 +3081,7 @@ class OTPClientRepository(ClientRepositoryBase):
         # If we're processing a lot of datagrams within one frame, we
         # may forget to send heartbeats.  Keep them coming!
         self.considerHeartbeat()
-        
+
     def askAvatarKnown(self, avId):
         #place holder, make code game specific
         return 0
@@ -3107,13 +3107,13 @@ class OTPClientRepository(ClientRepositoryBase):
 
     def queueRequestAvatarInfo(self, avId):
         pass
-        
+
     def identifyFriend(self, doId):\
         assert False, 'Must override this in inheriting class'
-            
+
     def identifyPlayer(self, playerId):
         assert False, 'Must override this in inheriting class'
-            
+
     def identifyAvatar(self, doId):
         """
         Returns either an avatar, FriendInfo,
@@ -3123,7 +3123,7 @@ class OTPClientRepository(ClientRepositoryBase):
         if info:
             return info
         else:
-            info = self.identifyFriend(doId)         
+            info = self.identifyFriend(doId)
         return info
 
 
@@ -3142,7 +3142,7 @@ class OTPClientRepository(ClientRepositoryBase):
     # override per-game
     def _isPlayerDclass(self, dclass):
         return False
-    
+
     # check if this is a player avatar in a location where they should not be
     def _isValidPlayerLocation(self, parentId, zoneId):
         return True
@@ -3188,7 +3188,7 @@ class OTPClientRepository(ClientRepositoryBase):
         classId = di.getUint16()
         # Get the DO Id
         doId = di.getUint32()
-        
+
         dclass = self.dclassesByNumber[classId]
 
         if self._isInvalidPlayerAvatarGenerate(doId, dclass, parentId, zoneId):
@@ -3197,7 +3197,7 @@ class OTPClientRepository(ClientRepositoryBase):
         deferrable = getattr(dclass.getClassDef(), 'deferrable', False)
         if not self.deferInterval or self.noDefer:
             deferrable = False
-        
+
         now = globalClock.getFrameTime()
         if self.deferredGenerates or deferrable:
             # This object is deferrable, or there are already deferred
@@ -3207,25 +3207,25 @@ class OTPClientRepository(ClientRepositoryBase):
                 # Queue it for later.
                 assert(self.notify.debug("deferring generate for %s %s" % (dclass.getName(), doId)))
                 self.deferredGenerates.append((CLIENT_CREATE_OBJECT_REQUIRED_OTHER, doId))
-                
+
                 # Keep a copy of the datagram, and move the di to the copy
                 dg = Datagram(di.getDatagram())
                 di = DatagramIterator(dg, di.getCurrentIndex())
-            
+
                 self.deferredDoIds[doId] = ((parentId, zoneId, classId, doId, di), deferrable, dg, [])
                 if len(self.deferredGenerates) == 1:
                     # We just deferred the first object on the queue;
                     # start the task to generate it.
                     taskMgr.remove('deferredGenerate')
                     taskMgr.doMethodLater(self.deferInterval, self.doDeferredGenerate, 'deferredGenerate')
-                    
+
             else:
                 # We haven't generated any deferrable objects in a
                 # while, so it's safe to go ahead and generate this
                 # one immediately.
                 self.lastGenerate = now
                 self.doGenerate(parentId, zoneId, classId, doId, di)
-                
+
         else:
             self.doGenerate(parentId, zoneId, classId, doId, di)
 
@@ -3307,3 +3307,12 @@ class OTPClientRepository(ClientRepositoryBase):
         except:
             self.notify.debug("In isLocalId(), localAvatar not created yet")
             return False
+
+    ITAG_PERM = 'perm'
+    ITAG_AVATAR = 'avatar'
+    ITAG_SHARD = 'shard'
+    ITAG_WORLD = 'world'
+    ITAG_GAME = 'game'
+
+    def addTaggedInterest(self, parentId, zoneId, mainTag, desc, otherTags = [], event = None):
+        return self.addInterest(parentId, zoneId, desc, event)

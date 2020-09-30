@@ -52,14 +52,14 @@ class DistributedLeaderBoard(DistributedObject.DistributedObject):
         DistributedObject.DistributedObject.generate(self)
 
         self.buildListParts()
-        
+
 
     def announceGenerate(self):
         """
         """
         DistributedObject.DistributedObject.announceGenerate(self)
         self.board.reparentTo(render)
-        
+
         self.accept("decorator-holiday-%d-ending" % ToontownGlobals.CRASHED_LEADERBOARD, self.showLists)
         self.accept("decorator-holiday-%d-starting" % ToontownGlobals.CRASHED_LEADERBOARD, self.hideLists)
 
@@ -180,7 +180,7 @@ class DistributedLeaderBoard(DistributedObject.DistributedObject):
         nameText.setText("Score Title")
         #nameText.setGlyphScale(.4)
         namePath = row.attachNewNode(nameText)
-        namePath.setScale(TTLocalizer.DLBtitleRowScale)
+        namePath.setScale(TTLocalizer.DLBbuildTitleRow)
         namePath.setDepthWrite(0)
 
         return row, nameText
@@ -251,5 +251,3 @@ class DistributedLeaderBoard(DistributedObject.DistributedObject):
         self.ignoreAll()
         self.board.removeNode()
         DistributedObject.DistributedObject.delete(self)
-
-

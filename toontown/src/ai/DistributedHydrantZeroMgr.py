@@ -7,7 +7,7 @@ class DistributedHydrantZeroMgr(DistributedPhaseEventMgr.DistributedPhaseEventMg
     neverDisable =1
     notify = DirectNotifyGlobal.directNotify.newCategory(
         'DistributedHydrantZeroMgr')
-    
+
     def __init__(self, cr):
         DistributedPhaseEventMgr.DistributedPhaseEventMgr.__init__(self, cr)
         cr.hydrantZeroMgr = self
@@ -15,15 +15,15 @@ class DistributedHydrantZeroMgr(DistributedPhaseEventMgr.DistributedPhaseEventMg
     def announceGenerate(self):
         """Tell other objects we're here."""
         DistributedPhaseEventMgr.DistributedPhaseEventMgr.announceGenerate(self)
-        messenger.send('hydrantZeroIsRunning', [self.isRunning])    
+        messenger.send('hydrantZeroIsRunning', [self.isRunning])
 
     def delete(self):
         self.notify.debug("deleting hydrantzeromgr")
-        messenger.send('hydrantZeroIsRunning', [False])   
+        messenger.send('hydrantZeroIsRunning', [False])
         DistributedPhaseEventMgr.DistributedPhaseEventMgr.delete(self)
         if hasattr(self.cr, "hydrantZeroMgr"):
             del self.cr.hydrantZeroMgr
-        
+
     def setCurPhase(self, newPhase):
         """We've gotten a new phase lets, tell the hydrants."""
         assert self.notify.debugStateCall(self)
@@ -34,6 +34,4 @@ class DistributedHydrantZeroMgr(DistributedPhaseEventMgr.DistributedPhaseEventMg
         """We've gotten a new phase lets, tell the hydrants."""
         assert self.notify.debugStateCall(self)
         DistributedPhaseEventMgr.DistributedPhaseEventMgr.setIsRunning(self, isRunning )
-        messenger.send('hydrantZeroIsRunning', [isRunning])        
-
-
+        messenger.send('hydrantZeroIsRunning', [isRunning])

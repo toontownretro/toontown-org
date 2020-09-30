@@ -28,7 +28,7 @@ CatalogItemVersion = 8
 # version 5: use new hprs instead of old hprs (temp-hpr-fix)
 # version 6: add loyaltyDays to Clothing, Emote,
 # version 7: add cost to RentalItem
-# version 8: add specialEventId 
+# version 8: add specialEventId
 
 # How much default markup for backorder items?
 CatalogBackorderMarkup = 1.2
@@ -92,7 +92,7 @@ class CatalogItem:
         # This is to be used as the primary constructor-from-arguments
         # method for CatalogItem derivatives.
         pass
-    
+
     def needsCustomize(self):
         # Returns true if the item still needs to be customized by the
         # user (e.g. by choosing a color).
@@ -102,7 +102,7 @@ class CatalogItem:
         # Returns true if items of this type should be saved in the
         # back catalog, false otherwise.
         return 0
-        
+
     def getBackSticky(self):
         #some items should hang around in the back catalog
         itemType = 0 #the types that should stick around
@@ -149,6 +149,11 @@ class CatalogItem:
         # avatar's closet, false otherwise.
         return 0
 
+    def storedInTrunk(self):
+        # Returns true if this kind of item takes up space in the
+        # avatar's trunk, false otherwise.
+        return 0
+
     def storedInAttic(self):
         # Returns true if this kind of item takes up space in the
         # avatar's attic, false otherwise.
@@ -171,7 +176,7 @@ class CatalogItem:
         # Returns true if the item cannot be bought because the avatar
         # has already bought his limit on this item.
         return 0
-        
+
     def hasBeenGifted(self, avatar):
         # returns true if this item is on your onGiftOrderList
         if avatar.onGiftOrder.count(self) != 0:
@@ -209,7 +214,7 @@ class CatalogItem:
         # This should return one of the P_* tokens from ToontownGlobals.
         # If the return value is zero or positive, the item is removed
         # from the mailbox.
-        
+
         self.notify.warning("%s has no purchase method." % (self))
         return ToontownGlobals.P_NoPurchaseMethod
 
@@ -219,22 +224,22 @@ class CatalogItem:
         # reduced price, and (b) it does not get placed in the
         # backorder catalog.
         return self.saleItem
-        
+
     def isGift(self):
         return 1
-        
+
     def isRental(self):
         return 0
-        
+
     def forBoysOnly(self):
         return 0
-            
+
     def forGirlsOnly(self):
         return 0
-        
+
     def setLoyaltyRequirement(self, days):
         self.loyaltyDays = days
-        
+
     def loyaltyRequirement(self):
         """Return. the number of days an account must have to purchase."""
         if not hasattr(self, "loyaltyDays"):
@@ -283,8 +288,8 @@ class CatalogItem:
     def cleanupPicture(self):
         assert self.hasPicture
         self.hasPicture=False
-        
-        
+
+
 
     def requestPurchase(self, phone, callback, optional=-1):
         # Orders the item via the indicated telephone.  Some items
@@ -302,7 +307,7 @@ class CatalogItem:
 
         assert(not self.needsCustomize())
         phone.requestPurchase(self, callback, optional)
-        
+
     def requestGiftPurchase(self, phone, targetDoID,callback, optional=-1):
         # Orders the item via the indicated telephone.  Some items
         # will pop up a dialog querying the user for more information
@@ -316,9 +321,9 @@ class CatalogItem:
         # item itself.
 
         # This method is only called on the client.
-        
+
         # assert 0, "Gift Purchase"
-        
+
         assert(not self.needsCustomize())
         phone.requestGiftPurchase(self, targetDoID, callback, optional)
         #base.cr.deliveryManager.sendRequestPurchaseGift(self, targetDoID, callback)
@@ -338,14 +343,14 @@ class CatalogItem:
         if retcode == ToontownGlobals.P_ItemAvailable: # worked can use right away
             return TTLocalizer.CatalogPurchaseItemAvailable
         elif retcode == ToontownGlobals.P_ItemOnOrder: # worked and will be delivered
-            return TTLocalizer.CatalogPurchaseItemOnOrder 
+            return TTLocalizer.CatalogPurchaseItemOnOrder
         elif retcode == ToontownGlobals.P_MailboxFull: #failure messages
             return TTLocalizer.CatalogPurchaseMailboxFull
         elif retcode == ToontownGlobals.P_OnOrderListFull:
             return TTLocalizer.CatalogPurchaseOnOrderListFull
         else:
             return TTLocalizer.CatalogPurchaseGeneralError % (retcode)
-            
+
     def getRequestGiftPurchaseErrorText(self, retcode):
         # PLEASE NOTE: this is not usually an error message, usually this returns a confiramtion -JML
         # Returns a string describing the error that occurred on
@@ -355,7 +360,7 @@ class CatalogItem:
         if retcode == ToontownGlobals.P_ItemAvailable: # worked can use right away
             return TTLocalizer.CatalogPurchaseGiftItemAvailable
         elif retcode == ToontownGlobals.P_ItemOnOrder: # worked and will be delivered
-            return TTLocalizer.CatalogPurchaseGiftItemOnOrder 
+            return TTLocalizer.CatalogPurchaseGiftItemOnOrder
         elif retcode == ToontownGlobals.P_MailboxFull: #failure messages
             return TTLocalizer.CatalogPurchaseGiftMailboxFull
         elif retcode == ToontownGlobals.P_OnOrderListFull:
@@ -390,10 +395,10 @@ class CatalogItem:
         # This method is only called on the client.
 
         mailbox.acceptItem(self, index, callback)
-        
+
     def discardItem(self, mailbox, index, callback):
         print("Item discardItem")
-        # Discards the item from the mailbox.  
+        # Discards the item from the mailbox.
         # This method is only called on the client.
 
         mailbox.discardItem(self, index, callback)
@@ -441,10 +446,10 @@ class CatalogItem:
         if (store & Location) and self.posHpr != None:
             result += ", posHpr = (%s, %s, %s, %s, %s, %s)" % (self.posHpr)
         return result
-    
+
     def __str__(self):
         return self.output()
-    
+
     def __repr__(self):
         return self.output()
 
@@ -501,7 +506,7 @@ class CatalogItem:
                 h = di.getArg(STInt8, 256.0/360.0)
                 p = di.getArg(STInt8, 256.0/360.0)
                 r = di.getArg(STInt8, 256.0/360.0)
-                
+
             self.posHpr = (x, y, z, h, p, r)
         if store & GiftTag:
             self.giftTag = di.getString()
@@ -523,7 +528,7 @@ class CatalogItem:
         if store & GiftTag:
             dg.addString(self.giftTag)
         dg.addUint8(self.specialEventId)
-    
+
     def getTypeCode(self):
         import CatalogItemTypes
         return CatalogItemTypes.CatalogItemTypes[self.__class__]
@@ -566,7 +571,7 @@ class CatalogItem:
     def makeFrame(self):
         # Returns a DirectFrame suitable for holding models returned
         # by getPicture().
-        
+
         # Don't import this at the top of the file, since this code
         # must run on the AI.
         from direct.gui.DirectGui import DirectFrame
@@ -622,7 +627,7 @@ class CatalogItem:
                 corner = Vec3(bMax - center)
                 #scale.setScale(1.0/corner[2])
                 scale.setScale(1.0/max(corner[0],corner[1],corner[2]))
-                
+
         return (frame, ival)
 
     def getBlob(self, store = 0):
@@ -630,7 +635,7 @@ class CatalogItem:
         dg.addUint8(CatalogItemVersion)
         encodeCatalogItem(dg, self, store)
         return dg.getMessage()
-        
+
 
     def getRequestPurchaseErrorTextTimeout(self):
         """
@@ -646,7 +651,7 @@ class CatalogItem:
         if daysToGo <0:
             daysToGo = 0
         return int(daysToGo)
-                
+
 
 def encodeCatalogItem(dg, item, store):
     """encodeCatalogItem
@@ -660,17 +665,17 @@ def encodeCatalogItem(dg, item, store):
     if item.isSaleItem():
         flags |= CatalogItemTypes.CatalogItemSaleFlag
     if item.giftTag != None:
-          flags |= CatalogItemTypes.CatalogItemGiftTag  
+          flags |= CatalogItemTypes.CatalogItemGiftTag
     dg.addUint8(flags)
     if item.giftTag != None:
         dg.addUint32(item.giftTag)
         if not item.giftCode:
-            item.giftCode = 0        
+            item.giftCode = 0
         dg.addUint8(item.giftCode)
     else:
         pass
         #print("No Gift Tag")
-    
+
     item.encodeDatagram(dg, store)
 
 
@@ -696,7 +701,7 @@ def decodeCatalogItem(di, versionNumber, store):
         typeIndex = flags & CatalogItemTypes.CatalogItemTypeMask
         gift = None
         code = None
-        if flags & CatalogItemTypes.CatalogItemGiftTag:  
+        if flags & CatalogItemTypes.CatalogItemGiftTag:
 
              gift = di.getUint32()
              code = di.getUint8()
@@ -705,7 +710,7 @@ def decodeCatalogItem(di, versionNumber, store):
             pass
         itemClass = CatalogReverseType[typeIndex]
         item = itemClass(di, versionNumber, store = store)
-        
+
     except Exception, e:
         CatalogItem.notify.warning("Invalid catalog item in stream: %s, %s" % (
             sys.exc_info()[0], e))
@@ -719,7 +724,7 @@ def decodeCatalogItem(di, versionNumber, store):
         item.saleItem = 1
     item.giftTag = gift
     item.giftCode = code
-       
+
     return item
 
 

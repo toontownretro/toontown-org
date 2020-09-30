@@ -8,6 +8,10 @@ from otp.otpbase.OTPGlobals import *
 from direct.showbase.PythonUtil import Enum, invertDict
 from pandac.PandaModules import BitMask32, Vec4
 
+MapHotkeyOn = 'alt'
+MapHotkeyOff = 'alt-up'
+MapHotkey = 'alt'
+
 AccountDatabaseChannelId = 4008
 ToonDatabaseChannelId = 4021
 DoodleDatabaseChannelId = 4023
@@ -108,7 +112,7 @@ P_OnAwardOrderListFull = -25 # unlikely, but just in case, he won 30 awards and 
 P_AwardMailboxFull = -24 # the award mailbox is full and can't take more
 P_ItemInPetTricks= -23 # trying to give a pet trick award but the toon has it in his pet tricks
 P_ItemInMyPhrases= -22 # trying to give a speed chat award but the toon has it in his My Phrases
-P_ItemOnAwardOrder = -21 # trying to give an award but the toon has it onAwardOrder, 
+P_ItemOnAwardOrder = -21 # trying to give an award but the toon has it onAwardOrder,
 P_ItemInAwardMailbox = -20 # trying to give an award but the toon has it in his award mailbox
 P_ItemAlreadyWorn = -19  # trying to give an award but the toon is already wearing the clothing item
 P_ItemInCloset = -18  # trying to give an award but the toon has it in his closet
@@ -987,6 +991,8 @@ BossCogBattleBPosHpr = (0, 25, 0, 180, 0, 0)
 # How many pie hits does it take to kill the Sellbot VP?
 SellbotBossMaxDamage = 100
 
+SellbotBossMaxDamageNerfed = 100
+
 # Where is the Sellbot Boss sitting in the three stages of the
 # VP sequence?
 SellbotBossBattleOnePosHpr = (0, -35, 0, -90, 0, 0)
@@ -1206,6 +1212,47 @@ NUMBER_CRUNCHER_INVASION = 93
 SILLY_CHATTER_FIVE = 94
 
 VICTORY_PARTY_HOLIDAY = 95
+
+SELLBOT_NERF_HOLIDAY = 96
+
+JELLYBEAN_TROLLEY_HOLIDAY = 97
+JELLYBEAN_FISHING_HOLIDAY = 98
+JELLYBEAN_PARTIES_HOLIDAY = 99
+
+BANK_UPGRADE_HOLIDAY = 100
+
+TOP_TOONS_MARATHON = 101
+
+SELLBOT_INVASION = 102
+SELLBOT_FIELD_OFFICE = 103
+SELLBOT_INVASION_MOVER_AND_SHAKER = 104
+
+IDES_OF_MARCH = 105
+
+EXPANDED_CLOSETS = 106
+
+TAX_DAY_INVASION = 107
+
+KARTING_TICKETS_HOLIDAY = 109
+
+PRE_JULY_4_DOWNSIZER_INVASION = 110
+PRE_JULY_4_BIGWIG_INVASION = 111
+
+COMBO_FIREWORKS = 112
+
+JELLYBEAN_TROLLEY_HOLIDAY_MONTH = 113
+JELLYBEAN_FISHING_HOLIDAY_MONTH = 114
+JELLYBEAN_PARTIES_HOLIDAY_MONTH = 115
+
+SILLYMETER_EXT_HOLIDAY = 116
+
+SPOOKY_BLACK_CAT = 117
+SPOOKY_TRICK_OR_TREAT = 118
+SPOOKY_PROPS = 119
+SPOOKY_COSTUMES = 120
+
+WACKY_WINTER_DECORATIONS = 121
+WACKY_WINTER_CAROLING = 122
 
 # Trick or Treat Holiday Values
 TOT_REWARD_JELLYBEAN_AMOUNT = 100
@@ -1559,12 +1606,12 @@ DL = 8
 DefaultWantNewsPageSetting = 1
 
 # GM magic words
-gmMagicWordList = [ 
-    "restock",  "restockUber",  "autoRestock", 
-    "resistanceRestock", "restockSummons", 
-    "uberDrop", "rich", "maxBankMoney", 
+gmMagicWordList = [
+    "restock",  "restockUber",  "autoRestock",
+    "resistanceRestock", "restockSummons",
+    "uberDrop", "rich", "maxBankMoney",
     "toonUp", "rod", "cogPageFull", "pinkSlips",
-    "Tickets",  "newSummons", "who",  "who all" 
+    "Tickets",  "newSummons", "who",  "who all"
  ]
 
 NewsPageScaleAdjust = 0.85
@@ -1576,3 +1623,67 @@ AnimPropTypes = Enum(("Unknown",
                       ),
                      start = -1
                      )
+
+EmblemTypes = Enum(('Silver', 'Gold'))
+
+NumEmblemTypes = 2
+
+DefaultMaxBankMoney = 12000
+DefaultBankItemId = 1350
+
+ToonAnimStates = set([
+ 'off',
+ 'neutral',
+ 'victory',
+ 'Happy',
+ 'Sad',
+ 'Catching',
+ 'CatchEating',
+ 'Sleep',
+ 'walk',
+ 'jumpSquat',
+ 'jump',
+ 'jumpAirborne',
+ 'jumpLand',
+ 'run',
+ 'swim',
+ 'swimhold',
+ 'dive',
+ 'cringe',
+ 'OpenBook',
+ 'ReadBook',
+ 'CloseBook',
+ 'TeleportOut',
+ 'Died',
+ 'TeleportedOut',
+ 'TeleportIn',
+ 'Emote',
+ 'SitStart',
+ 'Sit',
+ 'Push',
+ 'Squish',
+ 'FallDown',
+ 'GolfPuttLoop',
+ 'GolfRotateLeft',
+ 'GolfRotateRight',
+ 'GolfPuttSwing',
+ 'GolfGoodPutt',
+ 'GolfBadPutt',
+ 'Flattened',
+ 'CogThiefRunning',
+ 'ScientistJealous',
+ 'ScientistEmcee',
+ 'ScientistWork',
+ 'ScientistLessWork',
+ 'ScientistPlay',
+ ])
+
+AV_FLAG_REASON_TOUCH = 1
+AV_FLAG_HISTORY_LEN = 500
+AV_TOUCH_CHECK_DELAY_AI = 3.0
+AV_TOUCH_CHECK_DELAY_CL = 1.0
+AV_TOUCH_CHECK_DIST = 2.0
+AV_TOUCH_CHECK_DIST_Z = 5.0
+AV_TOUCH_CHECK_TIMELIMIT_CL = 0.002
+AV_TOUCH_COUNT_LIMIT = 5
+AV_TOUCH_COUNT_TIME = 300

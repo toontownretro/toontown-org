@@ -18,8 +18,9 @@ def showTeleportPanel(avId, avName, avDisableName):
     if globalTeleport != None:
         globalTeleport.cleanup()
         globalTeleport = None
-        
+
     globalTeleport = ToonTeleportPanel(avId, avName, avDisableName)
+    return
 
 def hideTeleportPanel():
     # A module function to close the global avatar detail if it is open.
@@ -27,6 +28,7 @@ def hideTeleportPanel():
     if globalTeleport != None:
         globalTeleport.cleanup()
         globalTeleport = None
+    return
 
 def unloadTeleportPanel():
     # A module function to completely unload the global friend
@@ -35,6 +37,7 @@ def unloadTeleportPanel():
     if globalTeleport != None:
         globalTeleport.cleanup()
         globalTeleport = None
+    return
 
 class ToonTeleportPanel(DirectFrame):
     """ToonTeleportPanel:
@@ -57,7 +60,7 @@ class ToonTeleportPanel(DirectFrame):
                              text = '',
                              text_wordwrap = 13.5,
                              text_scale = 0.06,
-                             text_pos = (0.0, 0.18), 
+                             text_pos = (0.0, 0.18),
                              )
 
         # If we're currently in move-furniture mode, stop it.
@@ -182,6 +185,7 @@ class ToonTeleportPanel(DirectFrame):
         self.show()
         self.fsm.enterInitialState()
         self.fsm.request('begin')
+        return
 
 
     def cleanup(self):
@@ -189,7 +193,7 @@ class ToonTeleportPanel(DirectFrame):
 
         Cancels any pending request and removes the panel from the
         screen.
-        
+
         """
         self.fsm.request('off')
         del self.fsm
@@ -200,7 +204,7 @@ class ToonTeleportPanel(DirectFrame):
 
     # Represents the initial state of the teleport query: no query in
     # progress.
-    
+
     def enterOff(self):
         pass
 
@@ -211,7 +215,7 @@ class ToonTeleportPanel(DirectFrame):
 
     # We have clicked on the "go to" button from the Avatar detail
     # panel.  Perform a few sanity checks.
-    
+
     def enterBegin(self):
         myId = base.localAvatar.doId
         hasManager = hasattr(base.cr, "playerFriendsManager")
@@ -229,7 +233,7 @@ class ToonTeleportPanel(DirectFrame):
                 self.fsm.request('checkAvailability')
             else:
                 self.fsm.request('notOnline')
-                
+
         elif hasManager and base.cr.playerFriendsManager.getAvHandleFromId(self.avId):
             # The avatar is a transient friend of ours.  Is she online?
             id = base.cr.playerFriendsManager.findPlayerIdFromAvId(self.avId)
@@ -241,14 +245,14 @@ class ToonTeleportPanel(DirectFrame):
                     self.fsm.request('notOnline')
             else:
                 self.fsm.request('wentAway')
-            
+
         else:
             # The avatar is not our friend and isn't around.
             self.fsm.request('wentAway')
 
     def exitBegin(self):
         pass
-        
+
     ##### Checking availability state #####
 
     # Ask the other avatar if he's available to be teleported to, and
@@ -330,7 +334,7 @@ class ToonTeleportPanel(DirectFrame):
     # Invalid attempt to teleport to a hood we haven't downloaded yet.
 
     def enterUnavailableHood(self, hoodId):
-        self['text'] = (TTLocalizer.TeleportPanelUnavailableHood % 
+        self['text'] = (TTLocalizer.TeleportPanelUnavailableHood %
                         base.cr.hoodMgr.getFullnameFromId(hoodId))
         self.bOk.show()
 
@@ -367,7 +371,7 @@ class ToonTeleportPanel(DirectFrame):
         for shard in base.cr.listActiveShards():
             if shard[0] == shardId:
                 pop = shard[2]
- 
+
         # if we got a pop for the shard in question and it's full
         if pop and pop > localAvatar.shardPage.midPop:
             self.notify.warning("Entering full shard: issuing performance warning")
@@ -386,6 +390,7 @@ class ToonTeleportPanel(DirectFrame):
         self.shardId = shardId
         self.hoodId = hoodId
         self.zoneId = zoneId
+        return
 
     def exitOtherShard(self):
         self.bYes.hide()
@@ -430,7 +435,7 @@ class ToonTeleportPanel(DirectFrame):
             place = base.cr.playGame.getPlace()
             place.requestTeleport(hoodId, zoneId, shardId, self.avId)
             unloadTeleportPanel()
-            
+
         return
 
     def exitTeleport(self):
@@ -459,18 +464,22 @@ class ToonTeleportPanel(DirectFrame):
         if avId != self.avId:
             # Ignore responses from an unexpected avatar.
             return
-        
+
         if available == 0:
             # The other avatar is not available to teleport to.
+            teleportNotify.debug('__teleportResponse: not available')
             self.fsm.request('notAvailable')
         elif available == 2:
             # The other avatar is ignoring us.
+            teleportNotify.debug('__teleportResponse: ignored')
             self.fsm.request('ignored')
         elif shardId != base.localAvatar.defaultShard:
+            teleportNotify.debug('__teleportResponse: otherShard')
             self.fsm.request('otherShard', [shardId, hoodId, zoneId])
         else:
+            teleportNotify.debug('__teleportResponse: teleport')
             self.fsm.request('teleport', [shardId, hoodId, zoneId])
-        
+
 
     def __handleDisableAvatar(self):
         """__handleDisableAvatar(self)

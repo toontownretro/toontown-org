@@ -1,7 +1,6 @@
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.gui.DirectGui import *
-from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from toontown.minigame.OrthoWalk import *
 from string import *
@@ -72,7 +71,7 @@ class DistributedHouse(DistributedObject.DistributedObject):
             self.nametag.setAvatar(NodePath())
             self.nametag = None
 
-    def load(self):        
+    def load(self):
         self.notify.debug("load")
 
         # Load the house once.  When we walk in a door, the house model will automatically
@@ -453,7 +452,7 @@ class DistributedHouse(DistributedObject.DistributedObject):
         #debugAxis.reparentTo(sign_origin)
         #debugAxis.wrtReparentTo(render)
         pos = sign_origin.getPos()
-        sign_origin.setPosHpr(pos[0],pos[1],pos[2]+.15*textHeight,90,0,0)
+        sign_origin.setPosHpr(pos[0],pos[1],pos[2]+0.15*textHeight,90,0,0)
         self.namePlate = sign_origin.attachNewNode(self.nameText)
         self.namePlate.setDepthWrite(0)
         self.namePlate.setPos(0,-0.05,0)

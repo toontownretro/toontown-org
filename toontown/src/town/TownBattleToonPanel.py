@@ -6,7 +6,6 @@ import string
 from toontown.toon import LaffMeter
 from toontown.battle import BattleBase
 from direct.gui.DirectGui import *
-from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 
 class TownBattleToonPanel(DirectFrame):
@@ -18,7 +17,7 @@ class TownBattleToonPanel(DirectFrame):
     def __init__(self, id):
 
         gui = loader.loadModel("phase_3.5/models/gui/battle_gui")
-        
+
         DirectFrame.__init__(self,
                              relief = None,
                              image = gui.find("**/ToonBtl_Status_BG"),
@@ -27,7 +26,7 @@ class TownBattleToonPanel(DirectFrame):
                              )
         self.setScale(0.8)
         self.initialiseoptions(TownBattleToonPanel)
-        
+
         # One day, this panel will be associated with an avatar
         self.avatar = None
         # The card
@@ -39,7 +38,7 @@ class TownBattleToonPanel(DirectFrame):
                                    text_scale = 0.06,
                                    )
         self.sosText.hide()
-        
+
         self.fireText = DirectLabel(parent = self,
                                    relief = None,
                                    pos = (0.1, 0, 0.015),
@@ -55,18 +54,18 @@ class TownBattleToonPanel(DirectFrame):
                                          text = TTLocalizer.TownBattleUndecided,
                                          text_scale = 0.1,
                                          )
-        
+
         # The text below the laff meter
         self.healthText = DirectLabel(parent = self,
                                       text = '',
                                       pos = (-0.06, 0, -0.075),
                                       text_scale = 0.055,
                                       )
-        
+
         # The event for the health text
         self.hpChangeEvent = None
 
-        # Create a gag node. 
+        # Create a gag node.
         self.gagNode = self.attachNewNode('gag')
         # Set the position just so
         self.gagNode.setPos(0.1, 0, 0.03)
@@ -109,7 +108,7 @@ class TownBattleToonPanel(DirectFrame):
             # Cleanup the previous laffMeter, if there was one
             if self.avatar:
                 self.cleanupLaffMeter()
-                
+
             self.avatar = avatar
             self.laffMeter = LaffMeter.LaffMeter(avatar.style, avatar.hp,
                                                  avatar.maxHp)
@@ -149,7 +148,7 @@ class TownBattleToonPanel(DirectFrame):
         self.setHealthText(hp, maxHp)
         return
 
-    def setValues(self, index, track, level=None, numTargets=None, 
+    def setValues(self, index, track, level=None, numTargets=None,
                 targetIndex=None, localNum=None):
         self.notify.debug(
             "Toon Panel setValues: index=%s track=%s level=%s numTargets=%s targetIndex=%s localNum=%s" %
@@ -164,7 +163,7 @@ class TownBattleToonPanel(DirectFrame):
         if self.hasGag:
             self.gag.removeNode()
             self.hasGag = 0
-        
+
         # Turn on the proper display items
         if (track == BattleBase.NO_ATTACK or
             track == BattleBase.UN_ATTACK):

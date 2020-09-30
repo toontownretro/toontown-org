@@ -1,7 +1,6 @@
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.gui.DirectGui import *
-from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from toontown.toonbase import ToontownGlobals
 from direct.distributed import DistributedObject
@@ -11,7 +10,6 @@ from direct.fsm import State
 from toontown.toon import Toon
 from direct.showbase import RandomNumGen
 from toontown.toonbase import TTLocalizer
-import random
 import random
 import cPickle
 from direct.showbase import PythonUtil
@@ -41,7 +39,7 @@ class DistributedGarden(DistributedObject.DistributedObject):
             self.propTable[i] = [None] * self.gridCells
         self.dx = 1.0/self.gridCells
         self.occupied = []
-        
+
     def generate(self):
         DistributedObject.DistributedObject.generate(self)
 
@@ -53,7 +51,7 @@ class DistributedGarden(DistributedObject.DistributedObject):
 
     def unload(self):
         pass
-    
+
     def delete(self):
         for prop in self.props:
             prop[0].removeNode()
@@ -61,7 +59,7 @@ class DistributedGarden(DistributedObject.DistributedObject):
             del prop
         del self.props
         self.props = None
-        
+
         self.unload()
 
     def sendNewProp(self, prop, x, y, z):
@@ -110,7 +108,7 @@ class DistributedGarden(DistributedObject.DistributedObject):
         self.notify.debug("addProp")
         self.props.append([prop, i, j])
         self.loadProp(prop, i, j)
-        
+
         # update the client and server
         self.b_setProps(self, props)
 
@@ -129,7 +127,7 @@ class DistributedGarden(DistributedObject.DistributedObject):
         for prop in props:
             aProps = aProps + prop
         self.sendUpdate("setProps", [aProps])
-        
+
     def setProps(self, props):
         self.notify.debug("setProps")
         self.props = props
@@ -137,8 +135,3 @@ class DistributedGarden(DistributedObject.DistributedObject):
         for prop in self.props:
             pInd,i,j = prop
             self.propTable[i,j] = pInd
-        
-    
-        
-        
-        

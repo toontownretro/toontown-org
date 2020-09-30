@@ -102,7 +102,7 @@ class DistributedRaceAI(DistributedObjectAI.DistributedObjectAI):
         taskMgr.doMethodLater(.5, self.enableEntryBarrier, "enableWaitingBarrier")
 
     def enableEntryBarrier(self, task):
-        self.enterRaceBarrier=self.beginBarrier("waitingForJoin", self.avIds, TTLocalizer.DRAwaitingForJoin, self.b_racersJoined)
+        self.enterRaceBarrier=self.beginBarrier("waitingForJoin", self.avIds, TTLocalizer.DRAIwaitingForJoin, self.b_racersJoined)
         self.notify.debug("Waiting for Joins!!!!")
         self.sendUpdate("waitingForJoin", [])
 
@@ -345,7 +345,7 @@ class DistributedRaceAI(DistributedObjectAI.DistributedObjectAI):
 
         # kickout racers who are taking too long
         qualTime = RaceGlobals.getQualifyingTime(self.trackId)
-        timeout = qualTime + TTLocalizer.DRAwaitingForJoin + 3     # 3 is for the 'countdown'
+        timeout = qualTime + TTLocalizer.DRAIwaitingForJoin + 3     # 3 is for the 'countdown'
         self.kickSlowRacersTask = taskMgr.doMethodLater(timeout, self.kickSlowRacers, "kickSlowRacers")
 
     def kickSlowRacers(self, task):
@@ -535,7 +535,7 @@ class DistributedRaceAI(DistributedObjectAI.DistributedObjectAI):
             self.air.writeServerEvent('suspicious', avId, 'Player checking for non-existant karting gag slot %s type %s index %s' % (slot, type, index))
             self.notify.warning("somebody is trying to check for a non-existant karting gag %s %s %s! avId: %s" % (slot, type, index, avId))
             return
-            
+
         if avId in self.racers:
             if(self.racers[avId].hasGag):
                 #Bad thing

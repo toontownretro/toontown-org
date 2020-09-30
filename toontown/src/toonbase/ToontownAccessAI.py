@@ -15,7 +15,7 @@ def canAccess(avatarId, zoneId):
         return False
     else:
         return True
-        
+
 # Determine if we're in a zone that free players have access to
 def openToAll(zoneId, avatar):
     canonicalZoneId = ZoneUtil.getCanonicalHoodId(zoneId)
@@ -26,8 +26,21 @@ def openToAll(zoneId, avatar):
         ToontownGlobals.Tutorial,
         ) or avatar.isInEstate():
         return True
-    elif(canonicalZoneId >= ToontownGlobals.DynamicZonesBegin and not avatar.getTutorialAck()): 
+    elif(canonicalZoneId >= ToontownGlobals.DynamicZonesBegin and not avatar.getTutorialAck()):
         # Check for being in the tutorial
         return True
     else:
         return False
+
+def canWearSuit(avatarId, zoneId):
+    canonicalZoneId = ZoneUtil.getCanonicalHoodId(zoneId)
+    allowedSuitZones = [ToontownGlobals.LawbotHQ,
+     ToontownGlobals.CashbotHQ,
+     ToontownGlobals.SellbotHQ,
+     ToontownGlobals.BossbotHQ]
+    if canonicalZoneId in allowedSuitZones:
+        return True
+    elif zoneId >= ToontownGlobals.DynamicZonesBegin:
+        return True
+    else:
+        return False        

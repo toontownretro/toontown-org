@@ -14,7 +14,7 @@ CrateHprs = [Vec3(90,0,0),
              Vec3(0,0,0)]
 
 T_PUSH = 1.5
-T_PAUSE = .1
+T_PAUSE = 0.1
 
 TorsoToOffset = {"ss" : .17,
                  "ms" : .18,
@@ -26,4 +26,3 @@ TorsoToOffset = {"ss" : .17,
                  "m" : .18,
                  "l" : .75,
                  }
-                 

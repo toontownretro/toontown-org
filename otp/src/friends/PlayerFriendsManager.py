@@ -1,6 +1,7 @@
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from otp.otpbase import OTPGlobals
+from otp.avatar.Avatar import teleportNotify
 from otp.friends import FriendResponseCodes
 
 
@@ -24,7 +25,7 @@ class PlayerFriendsManager(DistributedObjectGlobal):
         DistributedObjectGlobal.__init__(self, cr)
         self.playerFriendsList = set()
         self.playerId2Info = {}
-        self.playerAvId2avInfo = {} #a different (game specific) set of info 
+        self.playerAvId2avInfo = {} #a different (game specific) set of info
         self.accept('gotExtraFriendHandles', self.__handleFriendHandles)
 
     # Functions called by the client
@@ -73,7 +74,7 @@ class PlayerFriendsManager(DistributedObjectGlobal):
     def sendSCEmoteWhisper(self,recipientId,msgId):
         assert self.notify.debugCall()
         self.sendUpdate("whisperSCEmoteTo",[0,recipientId,msgId])
-        
+
     def setTalkAccount(self, toAc, fromAc, fromName, message, mods, flags):
         #print("setTalkAccount in PFM to:%s from:%s message:%s" % (toAc, fromAc, message))
         localAvatar.displayTalkAccount(fromAc, fromName, message, mods)
@@ -83,7 +84,7 @@ class PlayerFriendsManager(DistributedObjectGlobal):
             toName = friendInfo.playerName
         elif toAc == localAvatar.DISLid:
             toName = localAvatar.getName()
-        base.talkAssistant.receiveAccountTalk(None, None, fromAc, fromName, toAc, toName, message) 
+        base.talkAssistant.receiveAccountTalk(None, None, fromAc, fromName, toAc, toName, message)
 
     #Functions called from UD
 
@@ -98,7 +99,7 @@ class PlayerFriendsManager(DistributedObjectGlobal):
     def rejectInvite(self,playerId,reason):
         assert self.notify.debugCall()
         messenger.send(OTPGlobals.PlayerFriendRejectInviteEvent,[playerId,reason])
-        
+
     def rejectRemove(self,playerId,reason):
         assert self.notify.debugCall()
         messenger.send(OTPGlobals.PlayerFriendRejectRemoveEvent,[playerId,reason])
@@ -117,13 +118,13 @@ class PlayerFriendsManager(DistributedObjectGlobal):
         print ("rejectUseSecret %s"%(reason))
         assert self.notify.debugCall()
         messenger.send(OTPGlobals.PlayerFriendRejectUseSecretEvent,[reason])
-        
+
     def invitationResponse(self, playerId, respCode, context):
         if respCode == FriendResponseCodes.INVITATION_RESP_DECLINE:
             messenger.send(OTPGlobals.PlayerFriendRejectInviteEvent,[playerId,respCode])
         elif respCode == FriendResponseCodes.INVITATION_RESP_NEW_FRIENDS:
             pass
-            
+
 
 
    #Functions called from UD
@@ -158,7 +159,7 @@ class PlayerFriendsManager(DistributedObjectGlobal):
         av = base.cr.doId2do.get(info.avatarId,None)
         if av is not None:
             av.considerUnderstandable()
-        
+
         messenger.send(OTPGlobals.PlayerFriendUpdateEvent,[id,info])
 
     def removePlayerFriend(self,id):
@@ -187,7 +188,7 @@ class PlayerFriendsManager(DistributedObjectGlobal):
         if not pId:
             return 0
         return pId in self.playerFriendsList
-        
+
     def isAvatarOwnerPlayerFriend(self, avId):
         pId = self.findPlayerIdFromAvId(avId)
         if pId and self.isPlayerFriend(pId):
@@ -197,28 +198,28 @@ class PlayerFriendsManager(DistributedObjectGlobal):
 
     def getFriendInfo(self, pId):
         return self.playerId2Info.get(pId)
-        
+
     def findPlayerIdFromAvId(self, avId):
         for playerId in self.playerId2Info:
             if self.playerId2Info[playerId].avatarId == avId:
                 if self.playerId2Info[playerId].onlineYesNo:
                     return playerId
         return None
-        
+
     def findAvIdFromPlayerId(self, pId):
         pInfo = self.playerId2Info.get(pId)
         if pInfo:
             return pInfo.avatarId
         else:
             return None
-        
+
     def findPlayerInfoFromAvId(self, avId):
         playerId = self.findPlayerIdFromAvId(avId)
         if playerId:
             return self.getFriendInfo(playerId)
         else:
             return None
-        
+
     def askAvatarOnline(self, avId):
         returnValue = 0
         if self.cr.doId2do.has_key(avId):
@@ -230,26 +231,26 @@ class PlayerFriendsManager(DistributedObjectGlobal):
                 if playerInfo.onlineYesNo:
                     returnValue = 1
         return returnValue
-        
+
     def countTrueFriends(self):
         count = 0
         for id in self.playerId2Info:
             if self.playerId2Info[id].openChatFriendshipYesNo:
                 count += 1
         return count
-        
+
     def askTransientFriend(self, avId):
         if self.playerAvId2avInfo.has_key(avId) and not base.cr.isAvatarFriend(avId):
             return 1
         else:
             return 0
-        
+
     def askAvatarKnown(self, avId):
         if self.askAvatarKnownElseWhere(avId) or self.askAvatarKnownHere(avId):
             return 1
         else:
             return 0
-        
+
     def askAvatarKnownElseWhere(self, avId):
         if hasattr(base, "cr"):
             if base.cr.askAvatarKnown(avId):
@@ -261,31 +262,31 @@ class PlayerFriendsManager(DistributedObjectGlobal):
             return 1
         else:
             return 0
-        
+
     def requestAvatarInfo(self, avId):
         if hasattr(base, "cr"):
-            #base.cr.requestAvatarInfo(avId) 
-            base.cr.queueRequestAvatarInfo(avId) 
-        
+            #base.cr.requestAvatarInfo(avId)
+            base.cr.queueRequestAvatarInfo(avId)
+
     def __handleFriendHandles(self, handleList):
         for handle in handleList:
             # this line requires all handles to have the function getDoId, not much of a good way around it.
             self.playerAvId2avInfo[handle.getDoId()] = handle
         messenger.send('friendsListChanged')
-            
+
     def getAvHandleFromId(self, avId):
         if self.playerAvId2avInfo.has_key(avId):
             return self.playerAvId2avInfo[avId]
         else:
             return None
-            
+
     def identifyFriend(self, avId):
         handle = None
         handle = base.cr.identifyFriend(avId)
         if not handle:
             handle = self.getAvHandleFromId(avId)
         return handle
-            
+
     def getAllOnlinePlayerAvatars(self):
         returnList = []
         for avatarId in self.playerAvId2avInfo:
@@ -294,7 +295,7 @@ class PlayerFriendsManager(DistributedObjectGlobal):
                 if self.playerId2Info[playerId].onlineYesNo:
                     returnList.append(avatarId)
         return returnList
-        
+
     def identifyAvatar(self, doId):
         """
         Returns either an avatar or a FriendHandle, whichever we can
@@ -307,9 +308,3 @@ class PlayerFriendsManager(DistributedObjectGlobal):
 
     def friendsListFull(self):
         return len(self.playerFriendsList) >= OTPGlobals.MaxPlayerFriends
-            
-    
-            
-        
-        
-        

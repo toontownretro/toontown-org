@@ -3,6 +3,7 @@ from direct.showbase import GarbageReport, ContainerReport, MessengerLeakDetecto
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.InputStateGlobal import inputState
+from direct.showbase.ObjectCount import ObjectCount
 from direct.task import Task
 from direct.task.TaskProfiler import TaskProfiler
 from otp.avatar import Avatar
@@ -209,7 +210,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
 
         #elif wordIs('~addCameraPosition'):
         #    base.localAvatar.addCameraPosition()
-            
+
         #elif wordIs('~removeCameraPosition'):
         #    base.localAvatar.removeCameraPosition()
 
@@ -219,7 +220,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
 
         #elif wordIs('~printCameraPositions'):
         #    base.localAvatar.printCameraPositions()
-                
+
         elif wordIs("~exec"):
             # Enable execChat.
             from otp.chat import ChatManager
@@ -253,7 +254,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
             # there from before.  If a second parameter is supplied,
             # it is a number of seconds of temporary extra skew to
             # apply; the default is 0.
-            
+
             tm = self.cr.timeManager
             if tm == None:
                 response = "No TimeManager."
@@ -270,7 +271,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
             # Reset the period timer to expire in the indicated number
             # of seconds, or with no parameter, report the number of
             # seconds remaining.
-            
+
             timeout = string.strip(word[7:])
             if timeout != "":
                 seconds = int(timeout)
@@ -281,7 +282,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
             # Now report the number of seconds remaining.
             if self.cr.periodTimerExpired:
                 response = "Period timer has expired."
-                
+
             elif self.cr.periodTimerStarted:
                 elapsed = globalClock.getFrameTime() - self.cr.periodTimerStarted
                 secondsRemaining = self.cr.periodTimerSecondsRemaining - elapsed
@@ -312,7 +313,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
             else:
                 direct.enable()
             self.setMagicWordResponse("Enabled DIRECT")
-            
+
         elif wordIs("~TT"):
             if not direct:
                 return
@@ -405,7 +406,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
 
         elif wordIs("~fps"):
             self.doFps(word, avId, zoneId)
-                
+
         elif wordIs("~sleep"):
             args = word.split()
             if len(args) > 1:
@@ -653,14 +654,14 @@ class MagicWordManager(DistributedObject.DistributedObject):
             # we must delay the call because magicWordMgr is in a big try/except block
             DelayedCall(Functor(base.cr.deleteObjectLocation, ScratchPad(doId=doId), 1, 1))
             self.setMagicWordResponse('doing bad delete')
-            
+
         elif wordIs("~idTags"):
             messenger.send('nameTagShowAvId', [])
             base.idTags = 1
-            
+
         elif wordIs("~nameTags"):
             messenger.send('nameTagShowName', [])
-            base.idTags = 0            
+            base.idTags = 0
 
         elif wordIs("~hideNames"):
             # note do ~hideNames before ~hideGui if you want both off
@@ -673,7 +674,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
             if aspect2d.isHidden():
                 aspect2d.show()
             else:
-                aspect2d.hide()                   
+                aspect2d.hide()
 
         elif wordIs('~flush'):
             base.cr.doDataCache.flush()
@@ -757,10 +758,10 @@ class MagicWordManager(DistributedObject.DistributedObject):
                 errorCode = 12 # 12 = general python exception
                 if len(args) > 1:
                     errorCode = int(args[1])
-                
+
                 self.notify.info("Simulating client crash: exit error = %s" % (errorCode))
                 base.exitShow(errorCode)
-            
+
             self.setMagicWord(magicWord, avId, zoneId)
 
 
@@ -832,7 +833,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
     def doTex(self, word):
         """ Toggles texturing (with no parameters) or shows the named
         texture (with a parameter). """
-        
+
         args = word.split()
         if len(args) <= 1:
             # No parameters: clean up the old texture viewer.
@@ -854,7 +855,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
         if not tex:
             # Try it with stars on both ends.
             tex = TexturePool.findTexture('*%s*' % (args[1]))
-        
+
         if not tex:
             # Couldn't find that texture.
             self.setMagicWordResponse("Unknown texture: %s" % (args[1]))
@@ -982,7 +983,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
 
     def hideShadowCollisions(self):
         base.shadowTrav.hideCollisions()
-            
+
     def showCollisions(self):
         try:
             base.cTrav.showCollisions(render)
@@ -991,7 +992,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
 
     def hideCollisions(self):
         base.cTrav.hideCollisions()
-            
+
     def showCameraCollisions(self):
         try:
             localAvatar.ccTrav.showCollisions(render)
@@ -1054,7 +1055,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
             except:
                 fps = None
             if fps != None:
-                # ~fps <x>: force a particular frame rate. 
+                # ~fps <x>: force a particular frame rate.
                 globalClock.setMode(ClockObject.MForced)
                 globalClock.setDt(1.0/fps)
                 response = "Frame rate forced to %s fps." % (fps)
@@ -1067,7 +1068,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
             # value for display the fps meter.  This might have been
             # set too high by the client-fps mechanism.
             globalClock.setAverageFrameRateInterval(ConfigVariableDouble('average-frame-rate-interval').getValue())
-            
+
         if response != None:
             self.setMagicWordResponse(response)
 

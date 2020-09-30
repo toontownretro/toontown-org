@@ -4,7 +4,6 @@ from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 import random
 from direct.gui.DirectGui import *
-from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 import HouseGlobals
 import Estate

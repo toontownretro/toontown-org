@@ -3,6 +3,7 @@ from direct.distributed import DistributedObject
 from direct.interval.ProjectileInterval import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
+from toontown.racing.DistributedVehicle import DistributedVehicle
 from DroppedGag import *
 #This class is primarily for any gags whose target is not deterministically
 #know.
@@ -16,9 +17,9 @@ class DistributedGag(DistributedObject.DistributedObject):
         self.shadow=True
         self.dropShadow=None
         self.type = 0
-        
 
-            
+
+
 
     def delete(self):
         DistributedObject.DistributedObject.delete(self)
@@ -113,4 +114,3 @@ class DistributedGag(DistributedObject.DistributedObject):
 
     def setType(self, type):
         self.type = type; #0 banana #1 pie
-

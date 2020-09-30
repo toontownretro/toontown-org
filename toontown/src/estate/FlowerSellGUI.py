@@ -20,7 +20,7 @@ class FlowerSellGUI(DirectFrame):
                              pos = (0,0,0),
                              text = '',
                              text_wordwrap = 26,
-                             text_scale = TTLocalizer.FSGDFTextScale,
+                             text_scale = TTLocalizer.FSGUIdirectFrame,
                              text_pos = (0, 0.65),
                              )
         self.initialiseoptions(FlowerSellGUI)
@@ -37,7 +37,7 @@ class FlowerSellGUI(DirectFrame):
         newBasketFlower = base.localAvatar.flowerBasket.getFlower()
         self.picker.update(newBasketFlower)
         self.picker.show()
-        
+
         # Init buttons
         buttons = loader.loadModel('phase_3/models/gui/dialog_box_buttons_gui')
         okImageList = (buttons.find('**/ChtBx_OKBtn_UP'),
@@ -52,7 +52,7 @@ class FlowerSellGUI(DirectFrame):
             image = cancelImageList,
             pos = (0.3, 0, -0.58),
             text = TTLocalizer.FlowerGuiCancel,
-            text_scale = TTLocalizer.FSGCancelBtnTextScale,
+            text_scale = TTLocalizer.FSGUIcancelButton,
             text_pos = (0,-0.1),
             command = self.__cancel,
             )
@@ -62,7 +62,7 @@ class FlowerSellGUI(DirectFrame):
             image = okImageList,
             pos = (0.6, 0, -0.58),
             text = TTLocalizer.FlowerGuiOk,
-            text_scale = TTLocalizer.FSGOkBtnTextScale,
+            text_scale = TTLocalizer.FSGUIokButton,
             text_pos = (0,-0.1),
             command = self.__sellFlower,
             )
@@ -83,7 +83,7 @@ class FlowerSellGUI(DirectFrame):
 
     def __sellFlower(self):
         messenger.send(self.doneEvent, [1])
-    
+
     def __updateFlowerValue(self):
         flowerBasket = base.localAvatar.getFlowerBasket()
         num = len(flowerBasket)
@@ -91,5 +91,3 @@ class FlowerSellGUI(DirectFrame):
         self['text'] = TTLocalizer.FlowerBasketValue % { "name": base.localAvatar.getName(),
                                                    "num": num, "value":value }
         self.setText()
-        
-        

@@ -1,7 +1,6 @@
 from pandac.PandaModules import *
 from DistributedNPCToonBase import *
 from direct.gui.DirectGui import *
-from pandac.PandaModules import *
 import NPCToons
 from direct.task.Task import Task
 import TailorClothesGUI
@@ -21,7 +20,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
         self.roomAvailable = 0
         self.button = None
         self.popupInfo = None
-            
+
     def disable(self):
         self.ignoreAll()
         taskMgr.remove(self.uniqueName('popupPurchaseGUI'))
@@ -95,7 +94,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
     def setMovie(self, mode, npcId, avId, timestamp):
         """
         This is a message from the AI describing a movie between this NPC
-        and a Toon that has approached us. 
+        and a Toon that has approached us.
         """
         timeStamp = ClockDelta.globalClockDelta.localElapsedTime(timestamp)
         self.remain = NPCToons.CLERK_COUNTDOWN_TIME - timeStamp
@@ -104,7 +103,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
 
         # See if this is the local toon
         self.isLocalToon = (avId == base.localAvatar.doId)
-            
+
         assert(self.notify.debug("setMovie: %s %s %s %s" %
                           (mode, avId, timeStamp, self.isLocalToon)))
 
@@ -147,7 +146,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
             elif (mode == NPCToons.PURCHASE_MOVIE_START_NOROOM):
                 self.browsing = 0
                 self.roomAvailable = 0
-                
+
             self.av = base.cr.doId2do.get(avId)
             if self.av is None:
                 self.notify.warning("Avatar %d not found in doId" % (avId))
@@ -192,7 +191,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
                 print "bottomsList = %s" % self.av.getClothesBottomsList()
                 print ("-------------------------------------------------")
 
-            
+
         elif (mode == NPCToons.PURCHASE_MOVIE_COMPLETE):
             assert self.notify.debug('PURCHASE_MOVIE_COMPLETE')
             self.setChatAbsolute(TTLocalizer.STOREOWNER_GOODBYE,
@@ -208,7 +207,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
                 print "topsList = %s" % self.av.getClothesTopsList()
                 print "bottomsList = %s" % self.av.getClothesBottomsList()
                 print ("-------------------------------------------------")
-                
+
             self.resetTailor()
 
         elif (mode == NPCToons.PURCHASE_MOVIE_NO_MONEY):
@@ -313,7 +312,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
             # bit 0 = shirts
             # bit 1 = shorts
             # bit 2...unused
-            
+
             which = 0
             if self.clothesGUI.topChoice != -1:
                 which = which | ClosetGlobals.SHIRT
@@ -324,7 +323,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
             # clothes we are wearing
             if self.roomAvailable == 0:
                 if (self.isLocalToon):
-                    if (self.av.isClosetFull() or 
+                    if (self.av.isClosetFull() or
                         (which & ClosetGlobals.SHIRT and which & ClosetGlobals.SHORTS)):
                         # the closet is at max capacity
                         # or it's almost full and we are changing both our top and bottom
@@ -333,7 +332,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
                         self.button.hide()
                         self.cancelButton.hide()
                     else:
-                        self.d_setDNA(self.av.getStyle().makeNetString(), 2, which) 
+                        self.d_setDNA(self.av.getStyle().makeNetString(), 2, which)
             else:
                 self.d_setDNA(self.av.getStyle().makeNetString(), 2, which)
 
@@ -384,21 +383,21 @@ class DistributedNPCTailor(DistributedNPCToonBase):
             buttons.removeNode()
         # Show the confim loss popup
         self.popupInfo.reparentTo(aspect2d)
-        
+
     def __handleConfirmLossOK(self, finished, which):
         self.d_setDNA(self.av.getStyle().makeNetString(), finished, which)
         self.popupInfo.reparentTo(hidden)
-        
+
     def __handleConfirmLossCancel(self):
         self.d_setDNA(self.oldStyle.makeNetString(), 1)
         self.popupInfo.reparentTo(hidden)
-        
-    
+
+
     def d_setDNA(self, dnaString, finished, whichItems = ClosetGlobals.SHIRT | ClosetGlobals.SHORTS):
         # Report our DNA to the server
         self.sendUpdate('setDNA', [dnaString, finished, whichItems])
 
-            
+
     def setCustomerDNA(self, avId, dnaString):
         assert self.notify.debug("setCustomerDNA")
         # The AI doesn't set the DNA on swaps (finished=0) anymore.

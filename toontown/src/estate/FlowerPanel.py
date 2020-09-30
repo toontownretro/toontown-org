@@ -43,7 +43,7 @@ class FlowerPanel(DirectFrame):
         self.flower = flower
         self.parent = parent
         self.photo = None
-        
+
     def destroy(self):
         assert self.notify.debugStateCall(self)
         if self.photo:
@@ -70,11 +70,11 @@ class FlowerPanel(DirectFrame):
             )
         self.value =  DirectLabel(
             parent = self,
-            pos = (0, 0, TTLocalizer.FPBlankLabelPos),
+            pos = TTLocalizer.FPvaluePos,
             relief = None,
             state = DGG.NORMAL,
             text = "",
-            text_scale = TTLocalizer.FPBlankLabelTextScale,
+            text_scale = TTLocalizer.FPvalue,
             text_fg = (0, 0, 0, 1),
             text_pos = (0, 0, 0),
             text_font = ToontownGlobals.getInterfaceFont(),
@@ -115,13 +115,13 @@ class FlowerPanel(DirectFrame):
                      buttons.find('**/CloseBtn_DN'),
                      buttons.find('**/CloseBtn_Rllvr')),
             image_scale = (0.6, 1, 0.6),
-            command = self.handleCancel,            
+            command = self.handleCancel,
             )
         buttons.removeNode()
         self.photo = FlowerPhoto.FlowerPhoto(parent=self)
         # make the scroll list
         self.update(self.flower)
-        
+
     def update(self, flower):
         assert self.notify.debugStateCall(self)
         self.flower = flower
@@ -157,14 +157,14 @@ class FlowerPanel(DirectFrame):
         """
         assert len(bounds) == 4
         self.swimBounds=bounds
-        
+
     def setSwimColor(self, *colors):
         """
         colors are floats: red, green, blue, alpha
         """
         assert len(colors) == 4
         self.swimColor=colors
-        
+
     def handleCancel(self):
         assert self.notify.debugStateCall(self)
         self.hide()

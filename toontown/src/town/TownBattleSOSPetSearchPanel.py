@@ -1,7 +1,6 @@
 from pandac.PandaModules import *
 from direct.fsm import StateData
 from direct.gui.DirectGui import *
-from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 
 class TownBattleSOSPetSearchPanel(StateData.StateData):
@@ -38,7 +37,7 @@ class TownBattleSOSPetSearchPanel(StateData.StateData):
             command = self.__handleBack,
             )
         gui.removeNode()
-    
+
     def unload(self):
         self.frame.destroy()
         del self.frame

@@ -389,6 +389,14 @@ SCMenuAprilToons                 = "APRIL TOONS'"
 SCMenuSingingGroup               = "SINGING"
 SCMenuSillyHoliday                   = "SILLY METER"
 SCMenuVictoryParties             = "VICTORY PARTIES"
+SCMenuSellbotNerf                = "STORM SELLBOT"
+SCMenuJellybeanJam               = "JELLYBEAN WEEK"
+SCMenuHalloween                  = "HALLOWEEN"
+SCMenuWinter                     = "WINTER"
+SCMenuSellbotInvasion            = "SELLBOT INVASION"
+SCMenuFieldOffice                = "FIELD OFFICES"
+SCMenuIdesOfMarch                = "GREEN"
+SCMenuLawbotNerf                 = "LAWBOTS LOSE"
 
 # FriendSecret.py
 FriendSecretNeedsPasswordWarningTitle = "Parental Controls"
@@ -2081,6 +2089,207 @@ SpeedChatStaticText = {
     21205: 'Dance!',
     21206: 'Speak!',
 
+    # Phrases for April Toon's week
+    30100 : "Happy April Toons' Week!",
+    30101 : "Welcome to my April Toons' Week party!",
+    30110 : "Mickey is in Daisy Gardens.",
+    30111 : "Daisy is in Toontown Central.",
+    30112 : "Minnie is in The Brrrgh.",
+    30113 : "Pluto is in Melodyland.",
+    30114 : "Donald is sleepwalking at the Speedway.",
+    30115 : "Goofy is in Dreamland.",
+    
+    30120 : "Mickey is acting like Daisy!",
+    30121 : "Daisy is acting like Mickey!",
+    30122 : "Minnie is acting like Pluto!",
+    30123 : "Pluto is acting like Minnie!",
+    30124 : "Pluto is talking!",
+    30125 : "Goofy is acting like Donald!",
+    30126 : "Donald is dreaming he is Goofy!",
+    
+    30130 : "Watch how far I can jump.",
+    30131 : "Wow, you jumped really far!",
+    30132 : "Hey, Doodles can talk!",
+    30133 : "Did your Doodle just talk?",
+    30140 : "Things sure are silly around here!",
+    30141 : "How sillier could things get?",
+
+    # Phrases for Sellbot Nerf Event
+    30150: "Operation: Storm Sellbot is here!",
+    30151: "Sellbot Towers had its power drained by Doodles!",
+    30152: "The VP had his power drained by Doodles!",
+    30153: "Everyone can fight the VP right now!",
+    30154: "You don't need a Sellbot Disguise to fight the VP!",
+    30155: "You get a Rental Suit when you go into Sellbot Towers.",
+    30156: "Do you like my Rental Suit? Sorry about the safety pins!",
+    30157: "It's best to have eight Toons to fight the VP.",
+    30158: "Will you help me fight the VP?",
+    30159: "Do you want to fight the VP with me?",
+    30160: "Would you like to join my Sellbot VP group?",
+    30161: "I am looking for a Toon with a Rental Suit to fight the VP.",
+    30162: "I have a Rental Suit, and am looking to fight the VP.",
+    30163: "Just walk through the doors to get your Rental Suit.",
+    30164: "Save your gags for the Cogs inside!",
+    30165: "We have to defeat these Cogs first!",
+    30166: "Bump the barrels to gag up.",
+    30167: "Bump the barrel to get a Toon-up.",
+    30168: "Now we have to fight some Skelecogs!",
+    30169: "Jump up and touch the Toon's cage for pies!",
+    30170: "Now we fight the VP!",
+    30171: "Aim your pies by pressing the Delete button.",
+    30172: "Two Toons should throw pies through the VP's open doors!",
+    30173: "I'll stun the VP from the front.",
+    30174: "I'll stun the VP from the back.",
+    30175: "Jump when the VP jumps!",
+
+    # Phrases for Jellybean Jam
+    30180: "I got double jellybeans on the Trolley!",
+    30181: "I got double jellybeans from fishing!",
+    30182: "I got double jellybeans at a party!",
+    30183: "Jellybeans jellybeans jellybeans!",
+    30184: "I'm really keen to earn a bean!",
+    30185: "Don't be smelly, get beans of jelly!",
+    30186: "I'm gonna adopt a Doodle with all these jellybeans!",
+    30187: "What am I gonna spend all these jellybeans on?",
+    30188: "I'm gonna throw a huge party!",
+    30189: "I'm gonna decorate my whole Estate!",
+    30190: "I'm gonna buy a whole new wardrobe!",
+    30191: "Jellybeans, please!",
+    30192: "Don't be mean, give a bean!",
+    
+    # Phrases for caroling
+    60200 : "Deck the halls... ",
+    60201 : "Load some pies...",
+    60202 : "Joyful toons...",
+    60203 : "Snowman heads...",
+    60204 : "Toontown's merry...",
+    60205 : "Lure good cheer...",
+    
+    60220 : "Deck the halls with seltzer spray!\nHappy Winter Holiday!",
+    60221 : "Load some pies into your sleigh!\nHappy Winter Holiday!",
+    60222 : "Joyful toons bring Cogs dismay!\nHappy Winter Holiday!",
+    60223 : "Snowman heads are hot today!\nHappy Winter Holiday!",
+    60224 : "Toontown's merry, come what may!\nHappy Winter Holiday!",
+    60225 : "Lure good cheer the Toontown way!\nHappy Winter Holiday!",
+
+    # Phrases for Halloween
+    30250: "Boo!",
+    30251: "Happy Halloween!",
+    30252: "Spooky!",
+
+    # Phrases for Christmas
+    30275: "Happy holidays!",
+    30276: "Season's greetings!",
+    30277: "Have a Wonderful Winter!",    
+    
+    # Phrases for Silly Story
+    60301 : "Have you seen the Silly Meter?",
+    60302 : "The Silly Meter is in Toon Hall.",
+    60303 : "Things sure are getting silly around here!",
+    60304 : "I saw a fire hydrant moving!",
+    60305 : "Toontown is coming to life!",
+    60306 : "Have you been to Flippy's new office?",
+    60307 : "I caused a Silly Surge in battle!",
+    60308 : "Let's defeat some Cogs to make Toontown sillier!",
+    
+    60309 : "The Silly Meter is bigger and crazier than ever!",
+    60310 : "Lots of hydrants have come alive!",
+    60311 : "I saw a mail box moving!",
+    60312 : "I watched a trash can wake up!",
+    60313 : "How silly can it get?",
+    60314 : "What\'s going to happen next?",
+    60315 : "Something silly, I bet!",
+    60316 : "Have you caused a Silly Surge yet?",
+    60317 : "Let's defeat some Cogs to make Toontown sillier!",
+    
+    60318 : "Cog Invasion!",
+    60319 : "Incoming!",
+    60320 : "Let\'s stop those Cogs!",
+    60321 : "I miss the Silly Surges!",
+    60322 : "Let\'s go stop an Invasion!",
+    60323 : "Toontown is sillier than ever now!",
+    60324 : "Have you seen something come alive?",
+    60325 : "My favorites are the fire hydrants!",
+    60326 : "My favorites are the mailboxes!",
+    60327 : "My favorites are the trash cans!",
+    
+    60328 : "Hooray! We stopped the Cog invasions!",
+    60329 : "A hydrant helped me in battle!",
+    60330 : "A hydrant boosted my Squirt Gags!",
+    60331 : "A trash can boosted my Toon-Up Gags!",
+    60332 : "A mailbox helped my Throw Gags!",
+    
+    # Phrases for Victory Parties (warning 60400 is in use)
+    60350 : "Welcome to my Victory Party!",
+    60351 : "This is a great Victory Party!",
+    60352 : "We showed those Cogs who's boss!",
+    60353 : "Good job helping end the Cog invasions!",
+    60354 : "I bet this is driving the Cogs crazy!",
+    
+    60355 : "Let's play Cog-O-War!",
+    60356 : "My team won at Cog-O-War!",
+    60357 : "It's nice to have fire hydrants, trash cans, and mailboxes here!",
+    60358 : "I like the balloon of the Doodle biting the Cog!",
+    60359 : "I like the balloon of the Cog covered in ice cream!",
+    60360 : "I like the wavy Cog that flaps his arms!",
+    60361 : "I jumped on a Cog's face!",
+
+    # Phrases for Sellbot Field Offices
+    30400: "The Sellbots are invading!",
+    30401: "The V.P. was hopping mad about Operation: Storm Sellbot ...",
+    30402: "He's sending the Sellbots in to invade Toontown!",
+    30403: "Let's go fight some Sellbots!",
+    30404: "There's a new kind of building in Toontown!",
+    30405: "Have you seen the Mover & Shaker Field Offices?",
+    30406: "The V.P. created them as a reward for the Movers & Shakers.",
+    30407: "Let's go defeat a Field Office!",
+    30408: "I got an SOS Card for defeating a Field Office!",
+    30409: "Clear the map by exploring the maze.",
+    30410: "Destroy the Cogs by hitting them with water balloons!",
+    30411: "Movers & Shakers take two balloons to destroy.",
+    30412: "Look out for falling objects!",
+    30413: "Watch out for the Cogs!",
+    30414: "Collect Jokes to get a Toon-up at the end!",
+    30415: "When the room shakes, a Mover & Shaker is nearby.",
+    30416: "Defeat all four Movers & Shakers to open the exit!",
+    30417: "The exit is open!",
+    30418: "It's the Boss!",
+
+    # Phrases for Ides Of March
+    30450: "It's easy to be green!",
+    30451: "Visit Green Bean Jeans and you can be green too!",
+    30452: "It's on Oak Street in Daisy Gardens."
+
+    # Phrases for Lawbot Nerf Event
+    30460: "Operation: Lawbots Lose is here!",
+    30461: "The Doodles have done it again!",
+    30462: "The Chief Justice had his power drained by Doodles!",
+    30463: "Everyone can fight the Chief Justice right now!",
+    30464: "You don't need a Lawbot Disguise to fight the CJ!",
+    30465: "You get a Rental Suit when you go into the Courtroom in Lawbot HQ.",
+    30466: "Do you like my Rental Suit? The safety pins are so stylish!",
+    30467: "It's best to have eight Toons to fight the CJ.",
+    30468: "Will you help me fight the CJ?",
+    30469: "Would you like to join my Lawbot CJ group?",
+    30470: "I am looking for a Toon with a Rental Suit to fight the CJ.",
+    30471: "I have a Rental Suit, and want to fight the CJ!",
+    30472: "Just walk through the doors to get your Rental Suit.",
+    30473: "Save your gags for the Cogs inside!",
+    30474: "We have to defeat these Cogs first!",
+    30475: "Bump the barrels to get a Toon-up.",
+    30476: "Use the Chief Justice SpeedChatMenu!",
+    30477: "Now we have to fill the jury chairs with Toons!",
+    30478: "The more Toons we get in, the easier it will be to defeat the CJ!",
+    30479: "Now we fight the Chief Justice!",
+    30480: "Touch the witness stand to collect evidence.",
+    30481: "Watch out for the gavels!",
+    30482: "When you hit the scale, the CJ turns red!",
+    30483: "When the Cogs get evidence in the scale, the CJ turns green!",
+    30484: "Something cool happens if we stun all the Cogs at once!",
+    30485: "Throw evidence at Toons to give them a Toon-up!"
+    }
+
+SpeedChatStaticText = {
     # PIRATES ROOT - TOP LEVEL
     50001 : 'Aye',
     50002 : 'Nay',
@@ -2435,96 +2644,6 @@ SpeedChatStaticText = {
 
     65000 : "Yes",
     65001 : "No",    
-    
-    # Phrases for April Toon's week
-    60100 : "Happy April Toons' Week!",
-    60101 : "Welcome to my April Toons' Week party!",
-    60110 : "Mickey is in Daisy Gardens.",
-    60111 : "Daisy is in Toontown Central.",
-    60112 : "Minnie is in The Brrrgh.",
-    60113 : "Pluto is in Melodyland.",
-    60114 : "Donald is sleepwalking at the Speedway.",
-    60115 : "Goofy is in Dreamland.",
-    60120 : "Mickey is acting like Daisy!",
-    60121 : "Daisy is acting like Mickey!",
-    60122 : "Minnie is acting like Pluto!",
-    60123 : "Pluto is acting like Minnie!",
-    60124 : "Pluto is talking!",
-    60125 : "Goofy is acting like Donald!",
-    60126 : "Donald is dreaming he is Goofy!",
-    60130 : "Watch how far I can jump.",
-    60131 : "Wow, you jumped really far!",
-    60132 : "Hey, Doodles can talk!",
-    60133 : "Did your Doodle just talk?",
-    60140 : "Things sure are silly around here!",
-    60141 : "How sillier could things get?",
-    
-    # Phrases for caroling
-    60200 : "Deck the halls... ",
-    60201 : "Load some pies...",
-    60202 : "Joyful toons...",
-    60203 : "Snowman heads...",
-    60204 : "Toontown's merry...",
-    60205 : "Lure good cheer...",
-    
-    60220 : "Deck the halls with seltzer spray!\nHappy Winter Holiday!",
-    60221 : "Load some pies into your sleigh!\nHappy Winter Holiday!",
-    60222 : "Joyful toons bring Cogs dismay!\nHappy Winter Holiday!",
-    60223 : "Snowman heads are hot today!\nHappy Winter Holiday!",
-    60224 : "Toontown's merry, come what may!\nHappy Winter Holiday!",
-    60225 : "Lure good cheer the Toontown way!\nHappy Winter Holiday!",
-    
-    # Phrases for Silly Story
-    60301 : "Have you seen the Silly Meter?",
-    60302 : "The Silly Meter is in Toon Hall.",
-    60303 : "Things sure are getting silly around here!",
-    60304 : "I saw a fire hydrant moving!",
-    60305 : "Toontown is coming to life!",
-    60306 : "Have you been to Flippy's new office?",
-    60307 : "I caused a Silly Surge in battle!",
-    60308 : "Let's defeat some Cogs to make Toontown sillier!",
-    
-    60309 : "The Silly Meter is bigger and crazier than ever!",
-    60310 : "Lots of hydrants have come alive!",
-    60311 : "I saw a mail box moving!",
-    60312 : "I watched a trash can wake up!",
-    60313 : "How silly can it get?",
-    60314 : "What\'s going to happen next?",
-    60315 : "Something silly, I bet!",
-    60316 : "Have you caused a Silly Surge yet?",
-    60317 : "Let's defeat some Cogs to make Toontown sillier!",
-    
-    60318 : "Cog Invasion!",
-    60319 : "Incoming!",
-    60320 : "Let\'s stop those Cogs!",
-    60321 : "I miss the Silly Surges!",
-    60322 : "Let\'s go stop an Invasion!",
-    60323 : "Toontown is sillier than ever now!",
-    60324 : "Have you seen something come alive?",
-    60325 : "My favorites are the fire hydrants!",
-    60326 : "My favorites are the mailboxes!",
-    60327 : "My favorites are the trash cans!",
-    
-    60328 : "Hooray! We stopped the Cog invasions!",
-    60329 : "A hydrant helped me in battle!",
-    60330 : "A hydrant boosted my Squirt Gags!",
-    60331 : "A trash can boosted my Toon-Up Gags!",
-    60332 : "A mailbox helped my Throw Gags!",
-    
-    # Phrases for Victory Parties (warning 60400 is in use)
-    60350 : "Welcome to my Victory Party!",
-    60351 : "This is a great Victory Party!",
-    60352 : "We showed those Cogs who's boss!",
-    60353 : "Good job helping end the Cog invasions!",
-    60354 : "I bet this is driving the Cogs crazy!",
-    
-    60355 : "Let's play Cog-O-War!",
-    60356 : "My team won at Cog-O-War!",
-    60357 : "It's nice to have fire hydrants, trash cans, and mailboxes here!",
-    60358 : "I like the balloon of the Doodle biting the Cog!",
-    60359 : "I like the balloon of the Cog covered in ice cream!",
-    60360 : "I like the wavy Cog that flaps his arms!",
-    60361 : "I jumped on a Cog's face!",
     
     # Phrases for Singing
 ##    9000 : 'Middle ' + 'G1',
@@ -3261,6 +3380,26 @@ BoardingMenuSections = [
 -1,
 ]
 
+SellbotNerfMenuSections = [
+-1,
+"GROUPING",
+"SELLBOT TOWERS/VP",
+]
+
+JellybeanJamMenuSections = [
+"GET JELLYBEANS",
+"SPEND JELLYBEANS",
+]
+
+WinterMenuSections = [
+"CAROLING",
+-1
+]
+
+HalloweenMenuSections = [
+-1
+]
+
 SingingMenuSections = [
 -1
 ]
@@ -3268,6 +3407,25 @@ SingingMenuSections = [
 WhiteListMenu = [
 -1,
 "WHITELIST"
+]
+
+SellbotInvasionMenuSections = [
+-1
+]
+
+SellbotFieldOfficeMenuSections = [
+-1,
+"STRATEGY"
+]
+
+IdesOfMarchMenuSections = [
+-1
+]
+
+LawbotNerfMenuSections = [
+-1,
+"GROUPING",
+"COURTHOUSE/CJ",
 ]
 
 # TTAccount.py

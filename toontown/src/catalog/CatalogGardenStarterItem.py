@@ -17,13 +17,13 @@ class CatalogGardenStarterItem(CatalogItem.CatalogItem):
     def makeNewItem(self):
         # this will need to be persistant (db?)
         CatalogItem.CatalogItem.makeNewItem(self)
-        
+
     def getPurchaseLimit(self):
         # Returns the maximum number of this particular item an avatar
         # may purchase.  This is either 0, 1, or some larger number; 0
         # stands for infinity.
         return 0
-        
+
     def reachedPurchaseLimit(self, avatar):
         # Returns true if the item cannot be bought because the avatar
         # has already bought his limit on this item.
@@ -31,20 +31,20 @@ class CatalogGardenStarterItem(CatalogItem.CatalogItem):
            or self in avatar.awardMailboxContents or self in avatar.onAwardOrder or (hasattr(avatar, "gardenStarted") and avatar.getGardenStarted()):
             return 1
         return 0
-        
+
     def saveHistory(self):
         # Returns true if items of this type should be saved in the
         # back catalog, false otherwise.
         return 1
-        
+
     def getTypeName(self):
         # Returns the name of the general type of item.
         return TTLocalizer.GardenStarterTypeName
-        
-        
+
+
     def getName(self):
         return TTLocalizer.GardenStarterTypeName
-            
+
 
     def recordPurchase(self, avatar, optional):
         print("rental-- record purchase")
@@ -63,7 +63,7 @@ class CatalogGardenStarterItem(CatalogItem.CatalogItem):
                 pass
                 print("starter garden-- something not there")
                 #import pdb; pdb.set_trace()
-                
+
         return ToontownGlobals.P_ItemAvailable
 
     def getPicture(self, avatar):
@@ -80,7 +80,7 @@ class CatalogGardenStarterItem(CatalogItem.CatalogItem):
         #chatBalloon = loader.loadModel("phase_3/models/props/chatbox.bam")
         modelParent = loader.loadModel('phase_5.5/models/estate/watering_cans')
         model = modelParent.find('**/water_canA')
-        scale = .5
+        scale = 0.5
         heading = 45
 
         return self.makeFrameModel(model, spin)
@@ -100,21 +100,21 @@ class CatalogGardenStarterItem(CatalogItem.CatalogItem):
 
     def decodeDatagram(self, di, versionNumber, store):
         CatalogItem.CatalogItem.decodeDatagram(self, di, versionNumber, store)
-        
+
     def encodeDatagram(self, dg, store):
         CatalogItem.CatalogItem.encodeDatagram(self, dg, store)
-        
+
     def getDeliveryTime(self):
         # Returns the elapsed time in minutes from purchase to
         # delivery for this particular item.
         return 1  # 1 minute.
-        
+
     def isRental(self):
         return 0
-        
+
     def isGift(self):
         return 0
-        
+
     def acceptItem(self, mailbox, index, callback):
         # Accepts the item from the mailbox.  Some items will pop up a
         # dialog querying the user for more information before
@@ -144,12 +144,12 @@ class CatalogGardenStarterItem(CatalogItem.CatalogItem):
         #self.mailbox = mailbox
         #self.mailIndex = index
         #self.mailcallback = callback
-        
+
     def handleGardenConfirm(self, mailbox, index, callback, choice):
     #def handleRentConfirm(self, *args):
         #print(args)
         if choice > 0:
-            def handleTutorialDone():                
+            def handleTutorialDone():
                 self.gardenTutorial.destroy()
                 self.gardenTutorial = None
 

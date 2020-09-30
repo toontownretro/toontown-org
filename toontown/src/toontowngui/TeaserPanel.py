@@ -1,7 +1,6 @@
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from direct.gui import DirectGuiGlobals
-from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 import TTDialog
 from toontown.toonbase import TTLocalizer
@@ -29,7 +28,7 @@ Pages = {
     #                  image format flag [square = 2, portrait = 1, landscape = 0],
     #                  members only flag,
     #                  )
-    
+
     'otherHoods' : (TTLocalizer.TeaserOtherHoods,),
     'typeAName' : (TTLocalizer.TeaserTypeAName,),
     'sixToons'   : (TTLocalizer.TeaserSixToons,),
@@ -53,6 +52,11 @@ Pages = {
     'golf'       : (TTLocalizer.TeaserGolf,),
     'fishing'       : (TTLocalizer.TeaserFishing,),
     'parties'       : (TTLocalizer.TeaserParties,),
+    'plantGags' : (TTLocalizer.TeaserPlantGags,),
+    'pickGags' : (TTLocalizer.TeaserPickGags,),
+    'restockGags' : (TTLocalizer.TeaserRestockGags,),
+    'getGags' : (TTLocalizer.TeaserGetGags,),
+    'useGags' : (TTLocalizer.TeaserUseGags,),
     }
 
 PageOrder = [
@@ -79,6 +83,11 @@ PageOrder = [
     'gardening',
     'golf',
     'fishing',
+    'plantGags',
+    'pickGags',
+    'restockGags',
+    'getGags',
+    'useGags',
     ]
 
 class TeaserPanel(DirectObject):
@@ -89,38 +98,38 @@ class TeaserPanel(DirectObject):
     def __init__(self, pageName, doneFunc=None):
 
         self.doneFunc = doneFunc
- 
+
         # if we don't have a feature browser, make one
         if not hasattr(self, "browser"):
             self.browser = FeatureBrowser()
             self.browser.load()
-            self.browser.setPos(0, 0, TTLocalizer.TSRPbrowserPosZ)
+            self.browser.setPos(0, 0, TTLocalizer.TPbrowserPosZ)
             # make room for the top five features
             self.browser.setScale(0.75)
             self.browser.reparentTo(hidden)
-        
+
         self.upsellBackground = loader.loadModel("phase_3/models/gui/tt_m_gui_ups_panelBg")
-        
+
         self.leaveDialog = None
         self.showPage(pageName)
-        
+
         # The player might be able to exit the stop state either through some other
-        # panel or if his boarding party leader boards the elevator. 
+        # panel or if his boarding party leader boards the elevator.
         # Close any Teaser panel if the toon moves out of the stopped state.
         self.ignore("exitingStoppedState")
         self.accept("exitingStoppedState", self.cleanup)
-        
+
 
     def __handleDone(self, choice = 0):
         # clean up the teaser panel and take appropriate action
         self.cleanup()
         self.unload()
-        
+
         if choice == 1:
             self.__handlePay()
         else:
             self.__handleContinue()
-            
+
     def __handleContinue(self):
         # call the user done function
         if self.doneFunc:
@@ -140,7 +149,7 @@ class TeaserPanel(DirectObject):
 
     def destroy(self):
         self.cleanup()
-        
+
     # dialog callback code passes a value
     def cleanup(self):
         if hasattr(self, 'browser'):
@@ -160,14 +169,14 @@ class TeaserPanel(DirectObject):
         if hasattr(self, 'browser'):
             self.browser.destroy()
             del self.browser
-        
+
     def showPage(self, pageName):
         if not pageName in PageOrder:
             self.notify.error("unknown page '%s'" % pageName)
 
         # log velvet rope hits
         base.cr.centralLogger.writeClientEvent('velvetRope: %s' % pageName)
-        
+
         # map page name to browser index
         self.browser.scrollTo(PageOrder.index(pageName))
 
@@ -178,8 +187,8 @@ class TeaserPanel(DirectObject):
             parent = aspect2dp,
             text = TTLocalizer.TeaserTop,
             text_align = TextNode.ACenter,
-            text_wordwrap = TTLocalizer.TSRPdialogWordwrap,
-            text_scale = TTLocalizer.TSRPtop,
+            text_wordwrap = TTLocalizer.TPdialogWordwrap,
+            text_scale = TTLocalizer.TPdialog,
             topPad =-0.15,
             midPad = 1.25,
             sidePad = 0.25,
@@ -190,7 +199,7 @@ class TeaserPanel(DirectObject):
             buttonTextList = [TTLocalizer.TeaserSubscribe,
                               TTLocalizer.TeaserContinue,
                               ],
-            button_text_scale = TTLocalizer.TSRPbutton,
+            button_text_scale = TTLocalizer.TPbuttonTextList,
             buttonPadSF = 5.5,
             sortOrder = NO_FADE_SORT_INDEX,
             image =  self.upsellBackground,
@@ -198,7 +207,7 @@ class TeaserPanel(DirectObject):
         self.dialog.setPos(0, 0, 0.75)
         self.browser.reparentTo(self.dialog)
         base.transitions.fadeScreen(.5)
-        
+
         if base.config.GetBool('want-teaser-scroll-keys',0):
             self.accept('arrow_right', self.showNextPage)
             self.accept('arrow_left',  self.showPrevPage)
@@ -207,7 +216,7 @@ class TeaserPanel(DirectObject):
     def showNextPage(self):
         self.notify.debug("show next")
         self.browser.scrollBy(1)
-        
+
     def showPrevPage(self):
         self.notify.debug("show prev")
         self.browser.scrollBy(-1)
@@ -240,19 +249,19 @@ class FeatureBrowser(DirectScrolledList):
         assert PythonUtil.sameElements(Pages.keys(), PageOrder)
 
         self.parent = parent
-                
+
         optiondefs = (
             ('parent', self.parent,    None),
             ('relief', None,    None),
             ('numItemsVisible',  1,    None),
             ('items', [],    None),
             )
-            
+
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
         # Initialize superclasses
         DirectScrolledList.__init__(self, parent)
-        # We'll scroll using the arrow keys on the keyboard   
+        # We'll scroll using the arrow keys on the keyboard
         self.incButton.hide()
         self.decButton.hide()
         self.initialiseoptions(FeatureBrowser)
@@ -265,11 +274,11 @@ class FeatureBrowser(DirectScrolledList):
         # upsellModel = loader.loadModel("phase_3/models/gui/tt_m_gui_ups_mainGui")
         # guiModel = upsellModel.find("**/tt_t_gui_ups_logo_noBubbles")
         guiModel = loader.loadModel("phase_3/models/gui/tt_m_gui_ups_logo_noText")
-        
-        
+
+
         leftLocator = guiModel.find("**/bubbleLeft_locator")
         rightLocator = guiModel.find("**/bubbleRight_locator")
-        
+
         haveFunNode = TextNode("Have Fun")
         haveFunNode.setText(TTLocalizer.TeaserHaveFun)
         haveFunNode.setTextColor(0,0,0,1)
@@ -278,8 +287,8 @@ class FeatureBrowser(DirectScrolledList):
         haveFunNode.setFont(DirectGuiGlobals.getDefaultFont())
         haveFun = NodePath(haveFunNode)
         haveFun.reparentTo(rightLocator)
-        haveFun.setScale(TTLocalizer.TSRPhaveFunText)
-        
+        haveFun.setScale(TTLocalizer.TPhaveFun)
+
         JoinUsNode = TextNode("Join Us")
         JoinUsNode.setText(TTLocalizer.TeaserJoinUs)
         JoinUsNode.setTextColor(0,0,0,1)
@@ -289,16 +298,16 @@ class FeatureBrowser(DirectScrolledList):
         JoinUs = NodePath(JoinUsNode)
         JoinUs.reparentTo(leftLocator)
         JoinUs.setPos(0,0,-0.025)
-        JoinUs.setScale(TTLocalizer.TSRPjoinUsText)
-        
+        JoinUs.setScale(TTLocalizer.TPjoinUs)
+
         # axis = loader.loadModel("models/misc/xyzAxis")
         # axis.reparentTo(guiModel)
-        
+
         # make a panel for each feature
         for page in PageOrder:
             textInfo = Pages.get(page)
             textInfo = textInfo[0] +TTLocalizer.TeaserDefault
-                
+
             panel = DirectFrame(
                 parent = self,
                 relief = None,
@@ -307,9 +316,8 @@ class FeatureBrowser(DirectScrolledList):
                 image_pos = (0, 0, 0.0),
                 text_align = TextNode.ACenter,
                 text = textInfo,
-                text_scale = TTLocalizer.TSRPpanelScale,
-                text_pos = TTLocalizer.TSRPpanelPos,
+                text_scale = TTLocalizer.TPpanel,
+                text_pos = TTLocalizer.TPpanelPos,
                 )
             self.addItem(panel)
         guiModel.removeNode()
-

@@ -7,6 +7,7 @@ from direct.interval.IntervalGlobal import *
 from toontown.fishing import FishGlobals
 import GardenGlobals
 from direct.actor import Actor
+import random
 
 #WARNING Specials Photo is used in both GardenPage.py and PlantingGUI.py
 
@@ -271,5 +272,3 @@ class SpecialsPhoto(NodePath):
 
     def changeVariety(self, variety):
         self.variety = variety
-
-

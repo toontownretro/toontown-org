@@ -9,6 +9,7 @@ from direct.fsm import StateData
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from direct.task import Task
+from otp.distributed.TelemetryLimiter import RotationLimitToH, TLGatherAllAvs
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 
@@ -59,7 +60,7 @@ class House(Place.Place):
                             State.State('DFA',
                                         self.enterDFA,
                                         self.exitDFA,
-                                        ['DFAReject', 'teleportOut', 
+                                        ['DFAReject', 'teleportOut',
                                         'doorOut']),
                             State.State('DFAReject',
                                         self.enterDFAReject,
@@ -132,7 +133,7 @@ class House(Place.Place):
         assert(self.notify.debug("unload()"))
         # Call up the chain
         Place.Place.unload(self)
-        
+
         self.parentFSMState.removeChild(self.fsm)
         del self.parentFSMState
         del self.fsm
@@ -153,7 +154,7 @@ class House(Place.Place):
         self.accept("DistributedDoor_doorTrigger", self.handleDoorTrigger)
 
         #self.geom.reparentTo(render)
-        
+
         # Turn on the little red arrows.
         NametagGlobals.setMasterArrowsOn(1)
         # Request the state change:
@@ -181,7 +182,7 @@ class House(Place.Place):
         assert(self.notify.debug("setState(state="+str(state)+")"))
         if hasattr(self, 'fsm'):
             self.fsm.request(state)
-    
+
     def getZoneId(self):
         """
         Returns the current zone ID.
@@ -195,7 +196,7 @@ class House(Place.Place):
         globalClock.tick()
         base.transitions.irisIn()
         messenger.send("enterTutorialInterior")
-        
+
 
     def exitTutorial(self):
         pass
@@ -203,7 +204,7 @@ class House(Place.Place):
     # walk state inherited from Place.py
 
     # sticker book state inherited from Place.py
-        
+
     # doorIn/Out state inherited from Place.py
 
     # teleport in state
@@ -271,14 +272,14 @@ class House(Place.Place):
     # closet state
     def enterCloset(self):
         base.localAvatar.b_setAnimState('neutral', 1)
-        # People can still teleport to us 
+        # People can still teleport to us
         self.accept("teleportQuery", self.handleTeleportQuery)
         base.localAvatar.setTeleportAvailable(1)
         base.localAvatar.laffMeter.start()
         base.localAvatar.obscureMoveFurnitureButton(1)
         # Spawn the task that checks to see if toon has fallen asleep
         base.localAvatar.startSleepWatch(self.__handleFallingAsleepCloset)
-        self.enablePeriodTimer()        
+        self.enablePeriodTimer()
 
     def __handleFallingAsleepCloset(self, arg):
         if hasattr(self, "fsm"):
@@ -287,7 +288,7 @@ class House(Place.Place):
         # this message will make sure the clothes picking GUI goes away
         messenger.send("closetAsleep")
         base.localAvatar.forceGotoSleep()
-                
+
     def exitCloset(self):
         # Turn off what we turned on
         base.localAvatar.setTeleportAvailable(0)
@@ -304,5 +305,3 @@ class House(Place.Place):
 
     def exitBanking(self):
         Place.Place.exitBanking(self)
-
-

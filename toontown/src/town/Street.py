@@ -12,10 +12,12 @@ from direct.showbase import DirectObject
 from direct.fsm import StateData
 from direct.fsm import ClassicFSM, State
 from direct.task import Task
+from otp.distributed.TelemetryLimiter import RotationLimitToH, TLGatherAllAvs
 from toontown.battle import BattleParticles
 from toontown.building import Elevator
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
+from toontown.toon.Toon import teleportDebug
 from toontown.estate import HouseGlobals
 from toontown.toonbase import TTLocalizer
 from direct.interval.IntervalGlobal import *
@@ -30,7 +32,7 @@ class Street(BattlePlace.BattlePlace):
 
     # create a notify category
     notify = DirectNotifyGlobal.directNotify.newCategory("Street")
-    
+
     # special methods
 
     def __init__(self, loader, parentFSM, doneEvent):
@@ -43,17 +45,17 @@ class Street(BattlePlace.BattlePlace):
                            [State.State('start',
                                         self.enterStart,
                                         self.exitStart,
-                                        ['walk', 'tunnelIn', 
+                                        ['walk', 'tunnelIn',
                                          'doorIn', 'teleportIn',
                                          'elevatorIn']),
                             State.State('walk',
                                         self.enterWalk,
                                         self.exitWalk,
-                                        ['push', 'sit', 'stickerBook', 
-                                         'WaitForBattle', 'battle', 
+                                        ['push', 'sit', 'stickerBook',
+                                         'WaitForBattle', 'battle',
                                          'DFA', 'trialerFA',
                                          'doorOut', 'elevator',
-                                         'tunnelIn', 'tunnelOut', 
+                                         'tunnelIn', 'tunnelOut',
                                          'teleportOut', 'quest',
                                          'stopped', 'fishing', 'purchase',
                                          'died']),
@@ -71,7 +73,7 @@ class Street(BattlePlace.BattlePlace):
                                         ['walk', 'push', 'sit', 'battle',
                                          'DFA', 'trialerFA',
                                          'doorOut', 'elevator',
-                                         'tunnelIn', 'tunnelOut', 
+                                         'tunnelIn', 'tunnelOut',
                                          'WaitForBattle', 'teleportOut', 'quest',
                                          'stopped', 'fishing', 'purchase',
                                          ]),
@@ -167,7 +169,7 @@ class Street(BattlePlace.BattlePlace):
                                         self.enterFinal,
                                         self.exitFinal,
                                         ['start'])],
-                          
+
                            # Initial State
                            'start',
                            # Final State
@@ -176,14 +178,14 @@ class Street(BattlePlace.BattlePlace):
         self.parentFSM = parentFSM
         self.tunnelOriginList = []
         self.elevatorDoneEvent = "elevatorDone"
-        
+
         # For Halloween
         self.halloweenLights = []
 
     def enter(self, requestStatus, visibilityFlag=1, arrowsOn=1):
         # Note: The visibilityFlag was added for the tutorial, which
         # doesn't want visibility. TutorialStreet overrides this function,
-        # calling it with visibilityFlag=0. 
+        # calling it with visibilityFlag=0.
         assert self.notify.debug("enter(requestStatus="+str(requestStatus)
                                  +")")
         self.fsm.enterInitialState()
@@ -210,7 +212,7 @@ class Street(BattlePlace.BattlePlace):
             self.halloweenLights  = geom.findAllMatches("**/*light*")
             self.halloweenLights += geom.findAllMatches("**/*lamp*")
             self.halloweenLights += geom.findAllMatches("**/prop_snow_tree*")
-            
+
             for light in self.halloweenLights:
                 #light.reparentTo(render)
                 light.setColorScaleOff(1)
@@ -253,7 +255,7 @@ class Street(BattlePlace.BattlePlace):
         self.enterZone(requestStatus["zoneId"])
 
         # Add hooks for the linktunnels
-        self.tunnelOriginList = base.cr.hoodMgr.addLinkTunnelHooks(self, 
+        self.tunnelOriginList = base.cr.hoodMgr.addLinkTunnelHooks(self,
                 self.loader.nodeList, self.zoneId)
 
         # Note that the following fsm request *could* result in an
@@ -263,7 +265,7 @@ class Street(BattlePlace.BattlePlace):
         # no longer in this zone by the time we get there (which
         # requires immediately teleporting back to the safezone).
         self.fsm.request(requestStatus["how"], [requestStatus])
-        
+
     def exit(self, visibilityFlag=1):
         # See note on "enter" function about visibilityFlag.
         assert self.notify.debug("exit()")
@@ -271,7 +273,7 @@ class Street(BattlePlace.BattlePlace):
         if visibilityFlag:
             self.visibilityOff()
         self.loader.geom.reparentTo(hidden)
-        
+
         # For halloween
         def __lightDecorationOff__():
             for light in self.halloweenLights:
@@ -283,7 +285,7 @@ class Street(BattlePlace.BattlePlace):
 ##            holidayIds = base.cr.newsManager.getDecorationHolidayId()
 ##            if (ToontownGlobals.HALLOWEEN_COSTUMES in holidayIds) and self.loader.hood.spookySkyFile:
 ##                __lightDecorationOff__()
-        
+
 ##        for node in self.tunnelOriginList:
 ##            node.removeNode()
 ##        del self.tunnelOriginList
@@ -311,7 +313,7 @@ class Street(BattlePlace.BattlePlace):
         BattlePlace.BattlePlace.load(self)
         # Prepare the state machine
         self.parentFSM.getStateNamed("street").addChild(self.fsm)
-    
+
     def unload(self):
         assert self.notify.debug("unload()")
         self.parentFSM.getStateNamed("street").removeChild(self.fsm)
@@ -323,12 +325,12 @@ class Street(BattlePlace.BattlePlace):
         cleanupDialog("globalDialog")
         self.ignoreAll()
         # Call up the chain
-        BattlePlace.BattlePlace.unload(self)        
+        BattlePlace.BattlePlace.unload(self)
 
     # walk state inherited from BattlePlace.py
 
     # sticker book state inherited from Place.py
-        
+
     # battle state inherited from BattlePlace.py
 
     # elevatorIn state
@@ -351,7 +353,7 @@ class Street(BattlePlace.BattlePlace):
 
     def exitElevatorIn(self):
         assert self.notify.debug("exitElevatorIn()")
-        
+
 
     # elevator state
     # (For boarding a building elevator)
@@ -388,7 +390,7 @@ class Street(BattlePlace.BattlePlace):
         self.notify.debug("handling elevator done event")
         where = doneStatus['where']
         if (where == 'reject'):
-            # If there has been a reject the Elevator should show an 
+            # If there has been a reject the Elevator should show an
             # elevatorNotifier message and put the toon in the stopped state.
             # Don't request the walk state here. Let the the toon be stuck in the
             # stopped state till the player removes that message from his screen.
@@ -416,7 +418,7 @@ class Street(BattlePlace.BattlePlace):
         walking which means we will not get the onfloor event until
         we finish walking through the tunnel which means the tunnel
         will be hidden because of visibility
-        
+
         SO... we explicitly set you into the zone you're headed
         towards, which both reveals the tunnel and indicates the
         correct zone ID as your current zone, in case anyone needs
@@ -435,7 +437,7 @@ class Street(BattlePlace.BattlePlace):
         avId = requestStatus["avId"]
         hoodId = requestStatus["hoodId"]
         zoneId = requestStatus["zoneId"]
-        
+
         if avId != -1:
             if not base.cr.doId2do.has_key(avId):
                 # We're trying to teleport to a toon who isn't here
@@ -607,7 +609,7 @@ class Street(BattlePlace.BattlePlace):
                         self.loader.fadeInDict[i].finish()
                     self.loader.enterAnimatedProps(i)
                     i.unstash()
-                    
+
         # Make sure we changed zones
         if newZoneId != self.zoneId:
             if visualizeZones:
@@ -617,16 +619,16 @@ class Street(BattlePlace.BattlePlace):
                     self.loader.zoneDict[self.zoneId].clearColor()
                 if newZoneId != None:
                     self.loader.zoneDict[newZoneId].setColor(0, 0, 1, 1, 100)
-            
+
             # Tell the server that we changed zones
             if newZoneId != None:
                 base.cr.sendSetZoneMsg(newZoneId)
                 self.notify.debug("Entering Zone %d" % (newZoneId))
-                
+
             # The new zone is now old
             self.zoneId = newZoneId
         assert self.notify.debug("  newZoneId="+str(newZoneId))
-        
+
         geom = base.cr.playGame.getPlace().loader.geom
         self.halloweenLights  = geom.findAllMatches("**/*light*")
         self.halloweenLights += geom.findAllMatches("**/*lamp*")
@@ -635,3 +637,28 @@ class Street(BattlePlace.BattlePlace):
         for light in self.halloweenLights:
             #light.reparentTo(render)
             light.setColorScaleOff(1)
+
+    def replaceStreetSignTextures(self):
+        if not hasattr(base.cr, 'playGame'):
+            return
+        place = base.cr.playGame.getPlace()
+        if place is None:
+            return
+        geom = base.cr.playGame.getPlace().loader.geom
+        signs = geom.findAllMatches('**/*tunnelAheadSign*;+s')
+        if signs.getNumPaths() > 0:
+            streetSign = base.cr.streetSign
+            signTexturePath = streetSign.StreetSignBaseDir + '/' + streetSign.StreetSignFileName
+            loaderTexturePath = Filename(str(signTexturePath))
+            alphaPath = 'phase_4/maps/tt_t_ara_gen_tunnelAheadSign_a.rgb'
+            inDreamland = False
+            if place.zoneId and ZoneUtil.getCanonicalHoodId(place.zoneId) == ToontownGlobals.DonaldsDreamland:
+                inDreamland = True
+            alphaPath = 'phase_4/maps/tt_t_ara_gen_tunnelAheadSign_a.rgb'
+            if Filename(signTexturePath).exists():
+                signTexture = loader.loadTexture(loaderTexturePath, alphaPath)
+            for sign in signs:
+                if Filename(signTexturePath).exists():
+                    sign.setTexture(signTexture, 1)
+                if inDreamland:
+                    sign.setColorScale(0.525, 0.525, 0.525, 1)

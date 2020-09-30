@@ -8,6 +8,7 @@ ReportFoulLanguage = "MODERATION_FOUL_LANGUAGE"
 ReportPersonalInfo = "MODERATION_PERSONAL_INFO"
 ReportRudeBehavior = "MODERATION_RUDE_BEHAVIOR"
 ReportBadName = "MODERATION_BAD_NAME"
+ReportHacking = "MODERATION_HACKING"
 
 class CentralLogger(DistributedObjectGlobal):
 

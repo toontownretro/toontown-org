@@ -44,7 +44,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
         for stateName in ['quietZone']:
             state = self.fsm.getStateNamed(stateName)
             state.addTransition('factoryInterior')
-        
+
         self.musicFile = "phase_9/audio/bgm/encntr_suit_HQ_nbrhood.mid"
 
         self.cogHQExteriorModelPath = "phase_9/models/cogHQ/SellbotHQExterior"
@@ -69,7 +69,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
 
         # We shoud not look at the last 2 digits to match against these constants
         zoneId = (zoneId - (zoneId %100))
-        
+
         if zoneId == ToontownGlobals.SellbotHQ:
             self.geom = loader.loadModel(self.cogHQExteriorModelPath)
 
@@ -95,7 +95,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
             dgText = DirectGui.OnscreenText(
                 text = TTLocalizer.DaisyGardens[-1],
                 font = ToontownGlobals.getSuitFont(),
-                pos = (0,-0.3), scale = TTLocalizer.SCLdgSign,
+                pos = (0,-0.3), scale = TTLocalizer.SCHQLdgText,
                 # required for DecalEffect (must be a GeomNode, not a TextNode)
                 mayChange=False,
                 parent = dgSign)
@@ -187,7 +187,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
             fdTypeText = DirectGui.OnscreenText(
                 text = TTLocalizer.Factory,
                 font = ToontownGlobals.getSuitFont(),
-                pos = (0,-0.25), scale = TTLocalizer.SCLfdSign,
+                pos = (0,-0.25), scale = TTLocalizer.SCHQLfdTypeText,
                 # required for DecalEffect (must be a GeomNode, not a TextNode)
                 mayChange=False,
                 parent = fdSign)
@@ -195,7 +195,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
             fdText = DirectGui.OnscreenText(
                 text = TTLocalizer.SellbotFrontEntrance,
                 font = ToontownGlobals.getSuitFont(),
-                pos = (0,-0.34), scale = TTLocalizer.SCLdgSign,
+                pos = (0,-0.34), scale = TTLocalizer.SCHQLdgText,
                 # required for DecalEffect (must be a GeomNode, not a TextNode)
                 mayChange=False,
                 parent = fdSign)
@@ -230,7 +230,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
 
             front = self.geom.find("**/frontWall")
             front.node().setEffect(DecalEffect.make())
-            
+
             door = self.geom.find("**/door_0")
             parent = door.getParent()
             door.wrtReparentTo(front)
@@ -246,9 +246,9 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
             # that is ok because we do not need to load any models - they all
             # get loaded by the distributed object
             self.notify.warning("loadPlaceGeom: unclassified zone %s" % zoneId)
-            
+
         CogHQLoader.CogHQLoader.loadPlaceGeom(self, zoneId)
-    
+
 
     def unload(self):
         CogHQLoader.CogHQLoader.unload(self)
@@ -260,7 +260,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
         self.placeClass = FactoryExterior.FactoryExterior
         self.enterPlace(requestStatus)
         self.hood.spawnTitleText(requestStatus['zoneId'])
-        
+
     def exitFactoryExterior(self):
         taskMgr.remove("titleText")
         self.hood.hideTitleText()
@@ -270,7 +270,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
     def enterFactoryInterior(self, requestStatus):
         self.placeClass = FactoryInterior.FactoryInterior
         self.enterPlace(requestStatus)
-        
+
     def exitFactoryInterior(self):
         self.exitPlace()
         self.placeClass = None
@@ -280,4 +280,3 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
 
     def getBossPlaceClass(self):
         return SellbotHQBossBattle.SellbotHQBossBattle
-

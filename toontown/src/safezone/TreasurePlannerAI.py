@@ -9,7 +9,7 @@ class TreasurePlannerAI(DirectObject.DirectObject):
         "TreasurePlannerAI")
 
     def __init__(self, zoneId, treasureConstructor, callback=None):
-        
+
         self.zoneId = zoneId
         self.treasureConstructor = treasureConstructor
         # Callback should be a function that takes one argument (avId)
@@ -87,7 +87,7 @@ class TreasurePlannerAI(DirectObject.DirectObject):
     def placeTreasure(self, index):
         # make sure this spot is empty
         assert (self.treasures[index] == None)
-        
+
         # Get the spawn point xyz
         spawnPoint = self.spawnPoints[index]
 
@@ -122,7 +122,7 @@ class TreasurePlannerAI(DirectObject.DirectObject):
         index = self.findIndexOfTreasureId(treasureId)
         if index == None:
             # If it isn't here, it isn't here. Someone else must have
-            # grabbed it. 
+            # grabbed it.
             pass
         else:
             av = simbase.air.doId2do.get(avId)
@@ -175,6 +175,7 @@ class TreasurePlannerAI(DirectObject.DirectObject):
         self.treasures = []
         for spawnPoint in self.spawnPoints:
             self.treasures.append(None)
-            
+
     def __deleteTreasureNow(self, treasure):
         treasure.requestDelete()
+        self.deleteTaskNames.remove(taskName)

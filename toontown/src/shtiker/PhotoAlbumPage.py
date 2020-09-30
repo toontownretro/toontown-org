@@ -1,7 +1,6 @@
 from pandac.PandaModules import *
 import ShtikerPage
 from direct.gui.DirectGui import *
-from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 import os
 from toontown.toonbase import ToontownGlobals
@@ -17,7 +16,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
         self.photos = {}
         self.selectedFileName = None
         self.photoIndex = 0
-        
+
     def load(self):
         self.title = DirectLabel(
             parent = self,
@@ -75,7 +74,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
             text_scale = 0.1,
             text_pos = (0, -0.1),
             text_font = ToontownGlobals.getInterfaceFont(),
-            textMayChange = 0,            
+            textMayChange = 0,
             relief = None,
             pos = (0.73, 0, -0.33),
             scale = 0.4,
@@ -104,7 +103,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
 
         guiButton.removeNode()
         trashcanGui.removeNode()
-        
+
         gui = loader.loadModel("phase_3.5/models/gui/friendslist_gui")
 
         self.scrollList = DirectScrolledList(
@@ -297,7 +296,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
 
     def renameCancel(self):
         self.renameCleanup()
-        
+
     def renameCleanup(self):
         self.renamePanel.hide()
         # Restore the background focus on the chat entry.
@@ -325,7 +324,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
 
     def deleteCancel(self):
         self.deleteCleanup()
-        
+
     def deleteCleanup(self):
         self.deletePanel.hide()
 
@@ -393,7 +392,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
 
     def updateScrollList(self):
         newPhotos = self.getPhotos()
-        
+
         # Remove old buttons
         for photo in self.photos.keys():
             if photo not in newPhotos:
@@ -401,7 +400,7 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
                 self.scrollList.removeItem(photoButton)
                 photoButton.destroy()
                 del self.photos[photo]
-                
+
         # Add new photos
         for photo in newPhotos:
             if not self.photos.has_key(photo):
@@ -442,4 +441,3 @@ class PhotoAlbumPage(ShtikerPage.ShtikerPage):
 
     def nextPhoto(self):
         pass
-

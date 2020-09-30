@@ -6,7 +6,6 @@ from direct.gui.DirectGui import *
 from direct.showbase.PythonUtil import *
 from direct.interval.IntervalGlobal import *
 from direct.showbase.InputStateGlobal import inputState
-from pandac.PandaModules import *
 
 import Avatar
 from direct.controls import ControlManager
@@ -2047,4 +2046,3 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar,
         """
         assert(0)
         return 0
-

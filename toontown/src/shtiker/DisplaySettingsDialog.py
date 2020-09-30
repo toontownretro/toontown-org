@@ -7,6 +7,7 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TTDialog
 from toontown.toonbase import ToontownGlobals
+from toontown.toonbase.DisplayOptions import DisplayOptions
 
 class DisplaySettingsDialog(DirectFrame, StateData.StateData):
     """DisplaySettingsDialog:
@@ -23,7 +24,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
     EmbeddedMode = 2 # embedded inside the web browser
 
     notify = DirectNotifyGlobal.directNotify.newCategory("DisplaySettingsDialog")
-    
+
     def __init__(self):
         """__init__(self)
         """
@@ -96,8 +97,8 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
         self.c3b.setScale(0.4)
         c3f = circle.copyTo(self.c3b)
         c3f.setColor(1, 1, 1, 1)
-        c3f.setScale(0.8)        
-        
+        c3f.setScale(0.8)
+
         self.introText = DirectLabel(
             parent = self,
             relief = None,
@@ -107,7 +108,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
             text_align = TextNode.ALeft,
             pos = (-0.725, 0, 0.3),
             )
-        
+
         self.introTextSimple = DirectLabel(
             parent = self,
             relief = None,
@@ -133,7 +134,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
             items = ['x'],
             pos = (0, 0, 0),
             )
-        
+
         self.screenSizeLabel = DirectLabel(
             parent = self,
             relief = None,
@@ -154,7 +155,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
             pos = (0.04, 0, -0.085),
             command = self.__doScreenSizeLeft,
             )
-        
+
         self.screenSizeRightArrow = DirectButton(
             parent = self,
             relief = None,
@@ -166,7 +167,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
             pos = (0.54, 0, -0.085),
             command = self.__doScreenSizeRight,
             )
-        
+
         self.screenSizeValueText = DirectLabel(
             parent = self,
             relief = None,
@@ -219,7 +220,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
             boxRelief = None,
             pos = TTLocalizer.DSDembeddedButtonPos,
             command = self.__doEmbedded,
-            )        
+            )
 
         self.apply = DirectButton(
             parent = self,
@@ -246,7 +247,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
                      ),
             image_scale = (0.6,1,1),
             text_scale = TTLocalizer.DSDcancel,
-            text_pos = (TTLocalizer.DSDcancelButtonPositionX,-0.02),
+            text_pos = TTLocalizer.DSDcancelPos,
             pos = (0.20, 0, -0.53),
             command = self.__cancel,
             )
@@ -395,7 +396,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
             self.windowedButton['indicatorValue'] = 0
             self.fullscreenButton['indicatorValue'] = 0
             self.embeddedButton['indicatorValue'] = 1
-            
+
 
     def updateScreenSize(self):
         xSize, ySize = self.screenSizes[self.screenSizeIndex]
@@ -435,7 +436,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
         self.updateWindowed()
 
     def __doFullscreen(self, value):
-        self.displayMode = self.FullscreenMode 
+        self.displayMode = self.FullscreenMode
         self.updateWindowed()
 
     def __doEmbedded(self,value):
@@ -458,7 +459,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
 
         # Move our dialog under the fade screen.
         self.clearBin()
-            
+
         self.applyDialog = TTDialog.TTDialog(
             dialogName = 'DisplaySettingsApply',
             style = TTDialog.TwoChoice,
@@ -509,7 +510,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
 
         # Move our dialog back under the fade screen.
         self.clearBin();
-        
+
         self.timeoutDialog = TTDialog.TTDialog(
             dialogName = 'DisplaySettingsTimeout',
             style = TTDialog.TwoChoice,
@@ -543,7 +544,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
         self.notify.debug("  FULLSCREEN: %s" % bool(fullscreen))
         self.notify.debug("  X SIZE:     %s" % width)
         self.notify.debug("  Y SIZE:     %s" % height)
-            
+
 
         if ((self.current_pipe == pipe) and \
             (bool(self.current_properties.getParentWindow( )) == bool(embedded)) and \
@@ -561,10 +562,10 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
 
             if embedded:
                 properties = base.appRunner.windowProperties
-            
+
             # get current sort order
             original_sort = base.win.getSort ( )
-            
+
             if self.resetDisplayProperties(pipe, properties):
                 self.notify.debug("DISPLAY CHANGE SET")
 
@@ -597,9 +598,9 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
 
             base.graphicsEngine.renderFrame()
             base.graphicsEngine.renderFrame()
-                
+
         return result
-    
+
 
     def __timeoutCountdown(self, task):
         # This task monitors the countdown timer for accepting the new
@@ -654,7 +655,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
             base.panda3dRenderError()
 
         # Now open a dialog telling the user they've been restored.
-        
+
         # Move our dialog under the fade screen.
         self.clearBin()
 
@@ -662,7 +663,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
             revertText = TTLocalizer.DisplaySettingsRevertUser
         else:
             revertText = TTLocalizer.DisplaySettingsRevertFailed
-            
+
         self.revertDialog = TTDialog.TTDialog(
             dialogName = 'DisplaySettingsRevert',
             style = TTDialog.Acknowledge,
@@ -684,7 +685,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
 
     def __cancel(self):
         self.exit()
-    
+
     def resetDisplayProperties(self, pipe, properties):
         if base.win:
             currentProperties = base.win.getProperties()
@@ -710,14 +711,14 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
 
             self.notify.debug("window properties: %s" % properties)
             self.notify.debug("gsg: %s" % gsg)
-            
+
             base.pipe = pipe
             if not base.openMainWindow(props = properties, gsg = gsg,
                                        keepCamera = True):
                 self.notify.warning("OPEN MAIN WINDOW FAILED")
                 return 0
             self.notify.info("OPEN MAIN WINDOW PASSED")
-            
+
             base.disableShowbaseMouse()
             NametagGlobals.setCamera(base.cam)
             NametagGlobals.setMouseWatcher(base.mouseWatcherNode)
@@ -735,7 +736,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
                 self.notify.info("Window did not open, removing.")
                 base.closeWindow(base.win)
                 return 0
-                
+
         else:
             # If the properties are changing only slightly
             # (e.g. window size), we can keep the current window and
@@ -743,7 +744,7 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
             self.notify.debug("Adjusting properties")
             base.win.requestProperties(properties)
             base.graphicsEngine.renderFrame()
-            
+
         return 1
 
     def isEmbeddedPossible(self):
@@ -753,11 +754,10 @@ class DisplaySettingsDialog(DirectFrame, StateData.StateData):
         #if base.appRunner and base.appRunner.windowProperties:
         #    result = True
         return result
-    
+
     def isCurrentlyEmbedded(self):
         """Returns true if the current game window is inside a browser."""
         result = False
         if base.win.getProperties().getParentWindow():
             result = True
         return result
-        

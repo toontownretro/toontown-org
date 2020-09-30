@@ -8,9 +8,9 @@ import SkyUtil
 from direct.directnotify import DirectNotifyGlobal
 
 class TTHood(ToonHood.ToonHood):
-    
+
     notify = DirectNotifyGlobal.directNotify.newCategory("TTHood")
-    
+
     def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):
         ToonHood.ToonHood.__init__(self, parentFSM, doneEvent, dnaStore,
                                    hoodId)
@@ -24,8 +24,12 @@ class TTHood(ToonHood.ToonHood):
         # Keyed off of the News Manager holiday IDs stored in ToontownGlobals
         self.holidayStorageDNADict = {WINTER_DECORATIONS : ['phase_4/dna/winter_storage_TT.dna',
                                                             'phase_4/dna/winter_storage_TT_sz.dna'],
+                                      WACKY_WINTER_DECORATIONS : ['phase_4/dna/winter_storage_TT.dna',
+                                                                 'phase_4/dna/winter_storage_TT_sz.dna'],
                                       HALLOWEEN_PROPS : ['phase_4/dna/halloween_props_storage_TT.dna',
                                                       'phase_4/dna/halloween_props_storage_TT_sz.dna'  ],
+                                      SPOOKY_PROPS : ['phase_4/dna/halloween_props_storage_TT.dna',
+                                                      'phase_4/dna/halloween_props_storage_TT_sz.dna'],
                                       }
         self.skyFile = "phase_3.5/models/props/TT_sky"
         self.spookySkyFile = "phase_3.5/models/props/BR_sky"
@@ -34,14 +38,14 @@ class TTHood(ToonHood.ToonHood):
     def load(self):
         ToonHood.ToonHood.load(self)
         self.parentFSM.getStateNamed("TTHood").addChild(self.fsm)
-        
+
     def unload(self):
         self.parentFSM.getStateNamed("TTHood").removeChild(self.fsm)
         ToonHood.ToonHood.unload(self)
-        
+
     def enter(self, *args):
         ToonHood.ToonHood.enter(self, *args)
-        
+
     def exit(self):
         ToonHood.ToonHood.exit(self)
 
@@ -51,15 +55,15 @@ class TTHood(ToonHood.ToonHood):
     def startSky(self):
         #fade the sky in
         self.sky.setTransparency(TransparencyAttrib.MDual, 1)
-        
+
         self.notify.debug("The sky is: %s" %self.sky)
-        
+
         # we have the wrong sky; load in the regular sky
         if not (self.sky.getTag("sky") == "Regular"):
             self.endSpookySky()
-        
+
         SkyUtil.startCloudSky(self)
-        
+
     def startSpookySky(self):
         if hasattr(self, "sky") and self.sky:
             self.stopSky()
@@ -72,14 +76,14 @@ class TTHood(ToonHood.ToonHood):
         self.sky.setBin("background", 100)
         self.sky.setFogOff()
         self.sky.reparentTo(camera)
-        
+
         #fade the sky in
         self.sky.setTransparency(TransparencyAttrib.MDual, 1)
         fadeIn = self.sky.colorScaleInterval( 1.5, Vec4(1, 1, 1, 1),
                                                startColorScale = Vec4(1, 1, 1, 0.25),
                                                blendType = 'easeInOut')
         fadeIn.start()
-        
+
         # Nowadays we use a CompassEffect to counter-rotate the sky
         # automatically at render time, rather than depending on a
         # task to do this just before the scene is rendered.

@@ -46,7 +46,7 @@ class QuestChoiceGui(DirectFrame):
         # make an effort to make sure that things *should* be hidden
         # below it.
         #self.setBin('gui-popup', 10)
-        
+
     def setQuests(self, quests, fromNpcId, timeout):
         # The quest list is flattened. Every three elements is a quest
         for i in range(0, len(quests), 3):
@@ -79,6 +79,9 @@ class QuestChoiceGui(DirectFrame):
         self.timer.countdown(timeout, self.timeout)
 
     def chooseQuest(self, questId):
+        if questId != 0:
+            if base.config.GetBool('want-qa-regression', 0):
+                self.notify.info('QA-REGRESSION: CREATEATASK: Create A Task.')
         # Restore the left edge of the screen to the nametags.
         base.setCellsAvailable(base.leftCells, 1)
         base.setCellsAvailable([base.bottomCells[0], base.bottomCells[1]], 1)

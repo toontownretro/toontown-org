@@ -58,11 +58,11 @@ class ToontownChatManager(ChatManager.ChatManager):
             relief = None,
             image_color = Vec4(1,1,1,1),
             text = ("", OTPLocalizer.ChatManagerChat, OTPLocalizer.ChatManagerChat),
-            text_align = TextNode.ALeft,            
-            text_scale = TTLocalizer.CMnormalButton,
+            text_align = TextNode.ALeft,
+            text_scale = TTLocalizer.TCMnormalButton,
             text_fg = Vec4(1,1,1,1),
             text_shadow = Vec4(0,0,0,1),
-            text_pos = (-0.0525, -0.09),            
+            text_pos = (-0.0525, -0.09),
             textMayChange = 0,
             sortOrder = DGG.FOREGROUND_SORT_INDEX,
             command = self.__normalButtonPressed,
@@ -79,7 +79,7 @@ class ToontownChatManager(ChatManager.ChatManager):
                      gui.find("**/ChtBx_ChtBtn_DN"),
                      gui.find("**/ChtBx_ChtBtn_RLVR"),
                      ),
-            pos = TTLocalizer.CMscButtonPos,
+            pos = TTLocalizer.TCMscButtonPos,
             scale = 1.179,
             relief = None,
             image_color = Vec4(0.75,1,0.6,1),
@@ -107,7 +107,7 @@ class ToontownChatManager(ChatManager.ChatManager):
             pos = (-0.4, 0, 0.754),
             text = OTPLocalizer.ChatManagerWhisperTo,
             text_wordwrap = 7.0,
-            text_scale = TTLocalizer.CMwhisperFrame,
+            text_scale = TTLocalizer.TCMwhisperFrame,
             text_fg = Vec4(0,0,0,1),
             text_pos = (0,0.14),
             textMayChange = 1,
@@ -131,7 +131,7 @@ class ToontownChatManager(ChatManager.ChatManager):
                     ""),
             # Make the disabled button darker
             image3_color = Vec4(0.6, 0.6, 0.6, 0.6),
-            text_scale = TTLocalizer.CMwhisperButton,
+            text_scale = TTLocalizer.TCMwhisperButton,
             text_fg = (0,0,0,1),
             text_pos = (0,-0.09),
             textMayChange = 0,
@@ -154,7 +154,7 @@ class ToontownChatManager(ChatManager.ChatManager):
                     ""),
             # Make the disabled button darker
             image3_color = Vec4(0.6, 0.6, 0.6, 0.6),
-            text_scale = TTLocalizer.CMwhisperButton,
+            text_scale = TTLocalizer.TCMwhisperButton,
             text_fg = (0,0,0,1),
             text_pos = (0,-0.09),
             textMayChange = 0,
@@ -179,17 +179,17 @@ class ToontownChatManager(ChatManager.ChatManager):
             textMayChange = 0,
             command = self.__whisperCancelPressed,
             )
-       
+
         gui.removeNode()
 
-        ChatManager.ChatManager.__init__(self, cr, localAvatar) 
+        ChatManager.ChatManager.__init__(self, cr, localAvatar)
         self.defaultToWhiteList = base.config.GetBool('white-list-is-default', 1)
         self.chatInputSpeedChat = TTChatInputSpeedChat(self)
-        
+
         self.normalPos = Vec3(-1.083, 0, 0.804)
         self.whisperPos = Vec3(0.0, 0, 0.71)
         self.speedChatPlusPos = Vec3(-0.35, 0, 0.71)
-        
+
         if self.defaultToWhiteList:
             self.chatInputNormal = TTChatInputWhiteList()
             self.chatInputNormal.setPos(self.normalPos)
@@ -236,13 +236,13 @@ class ToontownChatManager(ChatManager.ChatManager):
         assert self.debugFunction()
         messenger.send("chatUpdateSCSinging", [textId])
         self.announceSCChat()
-        
+
     def sendSCSingingWhisperMessage(self, textId):
         """
         Send singing speedchat whisper message update.
         """
         pass
-    
+
     def sendSCToontaskChatMessage(self,
                                   taskId, toNpcId, toonProgress, msgIndex):
         """
@@ -289,7 +289,7 @@ class ToontownChatManager(ChatManager.ChatManager):
                            image_scale = (1.2, 1.0, 1.4),
                            text = OTPLocalizer.OpenChatWarning,
                            text_wordwrap = 19,
-                           text_scale = TTLocalizer.CMopenChatWarning,
+                           text_scale = TTLocalizer.TCMopenChatWarning,
                            text_pos = (0.0, 0.575),
                            textMayChange = 0,
                            )
@@ -312,16 +312,16 @@ class ToontownChatManager(ChatManager.ChatManager):
             self.scButton.show()
         if (not normObs):
             self.normalButton.show()
-            
-            
+
+
     def enterMainMenu(self):
         self.chatInputNormal.setPos(self.normalPos)
         if self.chatInputWhiteList.isActive():
             self.notify.debug('enterMainMenu calling checkObscured')
             ChatManager.ChatManager.checkObscurred(self)
         else:
-            ChatManager.ChatManager.enterMainMenu(self) 
-        
+            ChatManager.ChatManager.enterMainMenu(self)
+
     def exitOpenChatWarning(self):
         assert self.debugFunction()
         self.openChatWarning.hide()
@@ -330,7 +330,7 @@ class ToontownChatManager(ChatManager.ChatManager):
     def enterUnpaidChatWarning(self):
         assert self.debugFunction()
         self.forceHidePayButton = False
-        # This is handling three cases: 
+        # This is handling three cases:
         #                               1)parent password not set
         #                               2)UK Chat elligible and paid
         # Pop up a dialog indicating the user can't chat and show the appropriate
@@ -368,9 +368,9 @@ class ToontownChatManager(ChatManager.ChatManager):
                                                image_color = OTPGlobals.GlobalDialogColor,
                                                image_scale = (1.2, 1.0, 0.8),
                                                text = directFrameText,
-                                               text_wordwrap = TTLocalizer.CMunpaidChatWarningwordwrap,
-                                               text_scale = TTLocalizer.CMunpaidChatWarning,
-                                               text_pos = (0.0, TTLocalizer.CMunpaidChatWarning_text_z),
+                                               text_wordwrap = TTLocalizer.TCMunpaidChatWarningWordwrap,
+                                               text_scale = TTLocalizer.TCMunpaidChatWarning,
+                                               text_pos = (0.0, TTLocalizer.TCMunpaidChatWarningPos),
                                                textMayChange = 0,
                                                )
             self.payButton = DirectButton(self.unpaidChatWarning,
@@ -378,20 +378,20 @@ class ToontownChatManager(ChatManager.ChatManager):
                                           relief = None,
                                           text = payButtonText,
                                           image_scale = (1.75, 1, 1.15),
-                                          text_scale = TTLocalizer.CMpayButton,
+                                          text_scale = TTLocalizer.TCMpayButton,
                                           text_pos = (0,-0.02),
                                           textMayChange = 0,
-                                          pos = (0.0, 0.0, TTLocalizer.CMpayButton_pos_z),
+                                          pos = (0.0, 0.0, TTLocalizer.TCMpayButtonPos),
                                           command = self.__handleUnpaidChatWarningPay)
             DirectButton(self.unpaidChatWarning,
                          image = buttonImage,
                          relief = None,
                          text = directButtonText,
-                         textMayChange = 0,                         
+                         textMayChange = 0,
                          image_scale = (1.75, 1, 1.15),
                          text_scale = 0.06,
                          text_pos = (0,-0.02),
-                         pos = (0.0, 0.0, TTLocalizer.CMNoPasswordContinue_z),
+                         pos = TTLocalizer.TCMdirectButtonTextPos,
                          command = self.__handleUnpaidChatWarningContinue)
             guiButton.removeNode()
 
@@ -400,7 +400,7 @@ class ToontownChatManager(ChatManager.ChatManager):
             self.payButton.hide()
         else:
             self.payButton.show()
-                
+
         if not base.cr.productName in ['ES', 'JP', 'DE', 'BR', 'FR']:
             self.unpaidChatWarning.show()
         else:
@@ -409,11 +409,11 @@ class ToontownChatManager(ChatManager.ChatManager):
             place = base.cr.playGame.getPlace()
             if place:
                 place.fsm.request("stopped")
-            
+
             # make a teaser panel
             self.teaser = TeaserPanel.TeaserPanel('secretChat',
                                                   self.__handleUnpaidChatWarningDone)
-            
+
             # Do not show the pay button if they are in tutorial.
             # Let them finish the tutorial first or they will have to do it again.
             if base.localAvatar.inTutorial:
@@ -421,7 +421,7 @@ class ToontownChatManager(ChatManager.ChatManager):
 
         # The speedchat button is visible in this mode, but not the
         # normal chat button.
-        normObs, scObs = self.isObscured()        
+        normObs, scObs = self.isObscured()
         if (not scObs):
             self.scButton.show()
         if (not normObs):
@@ -473,9 +473,9 @@ class ToontownChatManager(ChatManager.ChatManager):
                          pos = (0.0, 0.0, -0.4),
                          command = self.__handleNoSecretChatAtAllOK)
             buttons.removeNode()
-            
+
         self.noSecretChatAtAll.show()
-        
+
     def exitNoSecretChatAtAll(self):
         assert self.debugFunction()
         self.noSecretChatAtAll.hide()
@@ -541,7 +541,7 @@ class ToontownChatManager(ChatManager.ChatManager):
                          textMayChange = 0,
                          pos = okPos,
                          command = okCommand)
-                
+
             DirectLabel(parent = self.noSecretChatWarning,
                         relief = None,
                         pos = (0, 0, 0.35),
@@ -558,7 +558,7 @@ class ToontownChatManager(ChatManager.ChatManager):
                     text = OTPLocalizer.ParentPassword,
                     text_scale = 0.06,
                     text_align = TextNode.ARight,
-                    textMayChange = 0,                
+                    textMayChange = 0,
                     )
 
                 self.passwordEntry = DirectEntry(
@@ -594,9 +594,9 @@ class ToontownChatManager(ChatManager.ChatManager):
             if self.passwordEntry:
                 self.passwordEntry['focus'] = 1
                 self.passwordEntry.enterText('')
-            
+
         self.noSecretChatWarning.show()
-        
+
     def exitNoSecretChatWarning(self):
         assert self.debugFunction()
         self.noSecretChatWarning.hide()
@@ -606,7 +606,7 @@ class ToontownChatManager(ChatManager.ChatManager):
         assert self.debugFunction()
         # The parent password has been entered, so now provide the
         # option to enable secret friends.
-        
+
         if self.activateChatGui == None:
             # setup ok/cancel button art
             guiButton = loader.loadModel("phase_3/models/gui/quit_button")
@@ -634,7 +634,7 @@ class ToontownChatManager(ChatManager.ChatManager):
                            text = OTPLocalizer.ActivateChat,
                            text_align = TextNode.ALeft,
                            text_wordwrap = 33,
-                           text_scale = TTLocalizer.CMactivateChat,
+                           text_scale = TTLocalizer.TCMactivateChatGui,
                            text_pos = (-0.82, 0.58),
                            textMayChange = 0,
                            )
@@ -794,7 +794,7 @@ class ToontownChatManager(ChatManager.ChatManager):
     def exitActivateChat(self):
         assert self.debugFunction()
         self.activateChatGui.hide()
-        
+
     def enterSecretChatActivated(self, mode=2):
         assert self.debugFunction()
         # Feedback that secret chat mode been changed.
@@ -826,7 +826,7 @@ class ToontownChatManager(ChatManager.ChatManager):
                            text = modeText,
                            text_align = TextNode.ACenter,
                            text_wordwrap = 14,
-                           text_scale = TTLocalizer.CMchatActivated,
+                           text_scale = TTLocalizer.TCMsecretChatActivated,
                            text_pos = (0, 0.25),
                            )
             # ok button
@@ -864,7 +864,7 @@ class ToontownChatManager(ChatManager.ChatManager):
     def enterProblemActivatingChat(self):
         assert self.debugFunction()
         # Some rare problem activating secret chat.
-        
+
         if self.problemActivatingChat == None:
             buttons = loader.loadModel('phase_3/models/gui/dialog_box_buttons_gui')
             buttonImage = (buttons.find('**/ChtBx_OKBtn_UP'),
@@ -895,7 +895,7 @@ class ToontownChatManager(ChatManager.ChatManager):
                          command = self.__handleProblemActivatingChatOK)
             buttons.removeNode()
         self.problemActivatingChat.show()
-        
+
     def exitProblemActivatingChat(self):
         assert self.debugFunction()
         self.problemActivatingChat.hide()
@@ -942,7 +942,7 @@ class ToontownChatManager(ChatManager.ChatManager):
                 self.fsm.request("normalChat")
         else:
             print ("ChatManager: productName: %s not recognized" % (base.cr.productName))
-        
+
     def __scButtonPressed(self):
         assert self.debugFunction()
         messenger.send('wakeup')
@@ -957,7 +957,7 @@ class ToontownChatManager(ChatManager.ChatManager):
         playerInfo = None
         if playerId:
             playerInfo = base.cr.playerFriendsManager.getFriendInfo(playerId)
-            
+
         if playerInfo:
             if playerInfo.understandableYesNo:
                 self.fsm.request("whisperChatPlayer", [avatarName, playerId])
@@ -971,8 +971,8 @@ class ToontownChatManager(ChatManager.ChatManager):
         if result == None:
             self.notify.warning('something went wrong in enterNormalChat, falling back to main menu')
             self.fsm.request('mainMenu')
-                
-            
+
+
     def enterWhisperChatPlayer(self, avatarName, playerId):
         result = ChatManager.ChatManager.enterWhisperChatPlayer(self, avatarName, playerId)
         self.chatInputNormal.setPos(self.whisperPos)
@@ -980,9 +980,9 @@ class ToontownChatManager(ChatManager.ChatManager):
         if result == None:
             self.notify.warning('something went wrong in enterWhisperChatPlayer, falling back to main menu')
             self.fsm.request('mainMenu')
-        
+
     def enterWhisperChat(self, avatarName, avatarId):
-        result = ChatManager.ChatManager.enterWhisperChat(self, avatarName, avatarId)        
+        result = ChatManager.ChatManager.enterWhisperChat(self, avatarName, avatarId)
         self.chatInputNormal.setPos(self.whisperPos)
         if result == None:
             self.notify.warning('something went wrong in enterWhisperChat, falling back to main menu')
@@ -1028,9 +1028,9 @@ class ToontownChatManager(ChatManager.ChatManager):
                          pos = (0.0, 0.0, -0.6),
                          command = self.__handleNoSecretChatAtAllOK)
             buttons.removeNode()
-            
+
         self.noSecretChatAtAllAndNoWhitelist.show()
-        
+
     def exitNoSecretChatAtAllAndNoWhitelist(self):
         assert self.debugFunction()
         self.noSecretChatAtAllAndNoWhitelist.hide()
@@ -1042,9 +1042,9 @@ class ToontownChatManager(ChatManager.ChatManager):
             self.previousStateBeforeTeaser = place.fsm.getCurrentState().getName()
             place.fsm.request('stopped')
         self.teaser = TeaserPanel.TeaserPanel(pageName='secretChat',
-                                              doneFunc=self.handleOkTeaser)         
+                                              doneFunc=self.handleOkTeaser)
         pass
-        
+
     def exitTrueFriendTeaserPanel(self):
         self.teaser.destroy()
         place = base.cr.playGame.getPlace()
@@ -1052,12 +1052,12 @@ class ToontownChatManager(ChatManager.ChatManager):
             if self.previousStateBeforeTeaser:
                 place.fsm.request(self.previousStateBeforeTeaser, force=1)
             else:
-                place.fsm.request('walk')        
+                place.fsm.request('walk')
         pass
 
     def handleOkTeaser(self):
         self.fsm.request("mainMenu")
-        
+
     def __whisperScButtonPressed(self, avatarName, avatarId, playerId):
         assert self.debugFunction()
         messenger.send('wakeup')
@@ -1068,13 +1068,13 @@ class ToontownChatManager(ChatManager.ChatManager):
             transientFriend = base.cr.playerFriendsManager.askTransientFriend(avatarId)
             if transientFriend:
                 playerId = base.cr.playerFriendsManager.findPlayerIdFromAvId(avatarId)
-        
+
         if avatarId and not transientFriend:
             if (self.fsm.getCurrentState().getName() == "whisperSpeedChat"):
                 self.fsm.request("whisper", [avatarName, avatarId, playerId])
             else:
                 self.fsm.request("whisperSpeedChat", [avatarId])
-                
+
         elif playerId:
             if (self.fsm.getCurrentState().getName() == "whisperSpeedChatPlayer"):
                 self.fsm.request("whisper", [avatarName, avatarId, playerId])
@@ -1130,7 +1130,7 @@ class ToontownChatManager(ChatManager.ChatManager):
             self.noSecretChatWarning['text'] = OTPLocalizer.NoSecretChatWarningWrongPassword
             self.passwordEntry['focus'] = 1
             self.passwordEntry.enterText('')
-            
+
     def __handleNoSecretChatWarningCancel(self):
         assert self.debugFunction()
         self.fsm.request("mainMenu")
@@ -1151,7 +1151,7 @@ class ToontownChatManager(ChatManager.ChatManager):
             base.cr.secretChatAllowed = 1
             base.cr.secretChatNeedsParentPassword = 0
             mode = 2
-            
+
         okflag, message = tt.enableSecretFriends(
             base.cr.userName, base.cr.password, password)
         if okflag:
@@ -1186,7 +1186,7 @@ class ToontownChatManager(ChatManager.ChatManager):
     def __handleProblemActivatingChatOK(self):
         assert self.debugFunction()
         self.fsm.request("mainMenu")
-    
+
     if __debug__:
         def debugFunction(self):
             """for debugging"""
@@ -1199,7 +1199,6 @@ class ToontownChatManager(ChatManager.ChatManager):
 
     def messageSent(self):
         pass
-        
+
     def deactivateChat(self):
         pass
-        

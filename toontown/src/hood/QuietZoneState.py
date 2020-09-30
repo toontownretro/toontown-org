@@ -60,20 +60,66 @@ class QuietZoneState(StateData.StateData):
 
     def load(self):
         self.notify.debug("load()")
-            
+
     def unload(self):
         self.notify.debug("unload()")
         del self.fsm
+
+    @classmethod
+    def enqueueState(cls, state, requestStatus):
+        cls.Queue = [(state, requestStatus)] + cls.Queue
+        state._enqueueCount += 1
+        if len(cls.Queue) == 1:
+            cls.startNextQueuedState()
+
+    @classmethod
+    def dequeueState(cls, state):
+        s, requestStatus = cls.Queue.pop()
+        s._enqueueCount -= 1
+        if len(cls.Queue) > 0:
+            cls.startNextQueuedState()
+
+    @classmethod
+    def startNextQueuedState(cls):
+        state, requestStatus = cls.Queue[-1]
+        state._start(requestStatus)
+
+    def _dequeue(self):
+        newQ = []
+        for item in self.__class__.Queue:
+            state, requestStatus = item
+            if state is not self:
+                newQ.append(item)
+
+        self.__class__.Queue = newQ
+
+    def getEnterWaitForSetZoneResponseMsg(self):
+        return 'enterWaitForSetZoneResponse-%s' % (id(self),)
+
+    def getQuietZoneLeftEvent(self):
+        return '%s-%s' % (base.cr.getQuietZoneLeftEvent(), id(self))
+
+    def getSetZoneCompleteEvent(self):
+        return 'setZoneComplete-%s' % (id(self),)
 
     def enter(self, requestStatus):
         self.notify.debug("enter(requestStatus="+str(requestStatus)+")")
         base.transitions.fadeScreen(1.0)
         self._requestStatus = requestStatus
-        self.fsm.request("waitForQuietZoneResponse")
+        #self.fsm.request("waitForQuietZoneResponse")
+        self._leftQuietZoneCallbacks = None
+        self._setZoneCompleteCallbacks = None
+        self._leftQuietZoneLocalCallbacks = {}
+        self._setZoneCompleteLocalCallbacks = {}
+        self.enqueueState(self, requestStatus)
+
+    def _start(self, requestStatus):
+        base.transitions.fadeScreen(1.0)
+        self.fsm.request('waitForQuietZoneResponse')
 
     def getRequestStatus(self):
         return self._requestStatus
-        
+
     def exit(self):
         self.notify.debug("exit()")
         del self._requestStatus
@@ -84,6 +130,43 @@ class QuietZoneState(StateData.StateData):
         base.cr.waitForDatabaseTimeout(requestName='quietZoneState-%s' % description)
     def clearWaitForDatabase(self):
         base.cr.cleanupWaitingForDatabase()
+
+    def clearWaitForDatabase(self):
+        base.cr.cleanupWaitingForDatabase()
+
+    def addLeftQuietZoneCallback(self, callback, priority = None):
+        if self._leftQuietZoneCallbacks:
+            return self._leftQuietZoneCallbacks.add(callback, priority)
+        else:
+            token = PriorityCallbacks.GetToken()
+            fdc = SubframeCall(callback, taskMgr.getCurrentTask().getPriority() - 1)
+            self._leftQuietZoneLocalCallbacks[token] = fdc
+            return token
+
+    def removeLeftQuietZoneCallback(self, token):
+        if token is not None:
+            lc = self._leftQuietZoneLocalCallbacks.pop(token, None)
+            if lc:
+                lc.cleanup()
+            if self._leftQuietZoneCallbacks:
+                self._leftQuietZoneCallbacks.remove(token)
+
+    def addSetZoneCompleteCallback(self, callback, priority = None):
+        if self._setZoneCompleteCallbacks:
+            return self._setZoneCompleteCallbacks.add(callback, priority)
+        else:
+            token = PriorityCallbacks.GetToken()
+            fdc = SubframeCall(callback, taskMgr.getCurrentTask().getPriority() - 1)
+            self._setZoneCompleteLocalCallbacks[token] = fdc
+            return token
+
+    def removeSetZoneCompleteCallback(self, token):
+        if token is not None:
+            lc = self._setZoneCompleteLocalCallbacks.pop(token, None)
+            if lc:
+                lc.cleanup()
+            if self._setZoneCompleteCallbacks:
+                self._setZoneCompleteCallbacks.remove(token)
 
     ##### handlers #####
 
@@ -131,6 +214,10 @@ class QuietZoneState(StateData.StateData):
 
     def exitOff(self):
         self.notify.debug("exitOff()")
+        self._leftQuietZoneCallbacks = PriorityCallbacks()
+        self._setZoneCompleteCallbacks = PriorityCallbacks()
+        self._leftQuietZoneLocalCallbacks = {}
+        self._setZoneCompleteLocalCallbacks = {}
 
     ##### WaitForQuietZoneResponse #####
 
@@ -147,7 +234,7 @@ class QuietZoneState(StateData.StateData):
             base.cr.setInQuietZone(True)
         self.setZoneDoneEvent = base.cr.getNextSetZoneDoneEvent()
         self.acceptOnce(self.setZoneDoneEvent,
-                        self._handleQuietZoneComplete)        
+                        self._handleQuietZoneComplete)
         self.waitForDatabase('WaitForQuietZoneResponse')
         if base.slowQuietZone:
             def sQZR(task):
@@ -158,8 +245,8 @@ class QuietZoneState(StateData.StateData):
                                   'slowQuietZone-sendQuietZoneRequest')
         else:
             base.cr.sendQuietZoneRequest()
-            
-    def _handleQuietZoneComplete(self):           
+
+    def _handleQuietZoneComplete(self):
         self.fsm.request("waitForZoneRedirect")
 
     def exitWaitForQuietZoneResponse(self):
@@ -178,7 +265,7 @@ class QuietZoneState(StateData.StateData):
         # us which zone we really want to be going to.  In most cases
         # we just bypass this and move directly to
         # WaitForSetZoneResponse.
-    
+
     def enterWaitForZoneRedirect(self):
         self.notify.debug("enterWaitForZoneRedirect(requestStatus="
                 +str(self._requestStatus)+")")
@@ -196,7 +283,7 @@ class QuietZoneState(StateData.StateData):
         if avId != -1:
             # If we're going to a particular avatar, we can't redirect.
             allowRedirect = 0
-            
+
         if not base.cr.welcomeValleyManager:
             # If we don't have a welcomeValleyManager, we must be running
             # in the dev environment without an AI; always put the
@@ -210,7 +297,7 @@ class QuietZoneState(StateData.StateData):
             # We're going to a WelcomeValley zone, and redirects are
             # not forbidden, so give the AI a chance to pick a zoneId
             # for us.
-            
+
             self.notify.info("Requesting AI redirect from zone %s." % (zoneId))
             if base.slowQuietZone:
                 def rZI(task, zoneId=zoneId, self=self):
@@ -234,7 +321,7 @@ class QuietZoneState(StateData.StateData):
         self.notify.info("Redirecting to zone %s." % (zoneId))
         base.cr.handlerArgs["zoneId"] = zoneId
         base.cr.handlerArgs["hoodId"] = ZoneUtil.getHoodId(zoneId)
-        
+
         self.fsm.request("waitForSetZoneResponse")
 
     def exitWaitForZoneRedirect(self):
@@ -249,7 +336,7 @@ class QuietZoneState(StateData.StateData):
 
         # In this state, we request a transition to our destination
         # zone and wait until we get there.
-    
+
     def enterWaitForSetZoneResponse(self):
         self.notify.debug("enterWaitForSetZoneResponse(requestStatus="
                 +str(self._requestStatus)+")")
@@ -272,8 +359,8 @@ class QuietZoneState(StateData.StateData):
 # now done locally on the AI
 ##         if base.cr.welcomeValleyManager:
 ##             base.cr.welcomeValleyManager.d_clientSetZone(zoneId)
-            
-                        
+
+
     def exitWaitForSetZoneResponse(self):
         self.notify.debug("exitWaitForSetZoneResponse()")
         self.clearWaitForDatabase()
@@ -286,7 +373,7 @@ class QuietZoneState(StateData.StateData):
         # In this state, we have already transitioned to our
         # destination zone, and we are waiting for all objects to be
         # manifested.
-    
+
     def enterWaitForSetZoneComplete(self):
         self.notify.debug("enterWaitForSetZoneComplete(requestStatus="
                 +str(self._requestStatus)+")")
@@ -306,8 +393,8 @@ class QuietZoneState(StateData.StateData):
                 nextFunc = self._handleSetZoneComplete
             self.waitForDatabase('WaitForSetZoneComplete')
             self.setZoneDoneEvent = base.cr.getLastSetZoneDoneEvent()
-            self.acceptOnce(self.setZoneDoneEvent, nextFunc)        
-        
+            self.acceptOnce(self.setZoneDoneEvent, nextFunc)
+
     def _handleSetZoneComplete(self):
         self.fsm.request("waitForLocalAvatarOnShard")
 
@@ -335,11 +422,25 @@ class QuietZoneState(StateData.StateData):
     def _announceDone(self):
         # Now you are in a real zone, you can chat
         base.localAvatar.startChat()
+        if base.endlessQuietZone:
+            self._dequeue()
+            return
+        doneEvent = self.doneEvent
+        requestStatus = self._requestStatus
+        self._setZoneCompleteCallbacks()
+        self._setZoneCompleteCallbacks = None
+        fdcs = self._setZoneCompleteLocalCallbacks.values()
+        self._setZoneCompleteLocalCallbacks = {}
+        for fdc in fdcs:
+            if not fdc.isFinished():
+                fdc.finish()
+
         # Send a message in case anyone in the world cares
         # whether we've just completely entered the zone.
-        messenger.send("setZoneComplete", self._requestStatus)
+        messenger.send(self.getSetZoneCompleteEvent(), [requestStatus])
         # Tell our parent that we're done:
-        messenger.send(self.doneEvent)
+        messenger.send(doneEvent)
+        self._dequeue()
 
     def exitWaitForLocalAvatarOnShard(self):
         self.notify.debug("exitWaitForLocalAvatarOnShard()")

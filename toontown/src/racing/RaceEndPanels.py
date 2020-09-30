@@ -12,7 +12,7 @@ class RaceResultsPanel(DirectFrame):
 
     notify = DirectNotifyGlobal.directNotify.newCategory('RaceEndPanels')
 
-    
+
     def __init__(self,numRacers,race, raceEndPanel, *args,**kwargs):
         opts = {'relief':None,
                 'geom':DGG.getDefaultDialogGeom(),
@@ -22,7 +22,7 @@ class RaceResultsPanel(DirectFrame):
         opts.update(kwargs)
         DirectFrame.__init__(self,*args,**opts)
         self.initialiseoptions(RaceResultsPanel)
-        
+
         self.entryList = []
         self.entryListSeqs = []
         self.pointSeqs = []
@@ -39,7 +39,7 @@ class RaceResultsPanel(DirectFrame):
             pos = (0.7, 0, 0.3),
             text = TTLocalizer.KartRace_CircuitPoints,
             text_fg = (0.0, 0.0, 0.0, 1.0),
-            text_scale = TTLocalizer.REPraceEnd/2,
+            text_scale = TTLocalizer.REPlargeLabel/2,
             )
 
         self.pointsLabel.hide()
@@ -53,14 +53,14 @@ class RaceResultsPanel(DirectFrame):
                 pos = self.getRowPos(x),
                 )
             self.rowFrame.append(frame)
-            
+
             pLabel = DirectLabel(
                 parent = frame,
                 relief = None,
                 pos = (0.0,0.0,-0.01),
                 text = `x+1`+' -',
                 text_fg = (0.5, 0.5, 0.5, 1.0),
-                text_scale = TTLocalizer.REPraceEnd,
+                text_scale = TTLocalizer.REPlargeLabel,
                 text_align = TextNode.ARight,
                 text_font = DGG.getDefaultFont()#ToontownGlobals.getSignFont(),
                 )
@@ -77,18 +77,18 @@ class RaceResultsPanel(DirectFrame):
                 pos = (0.46,0.0,0.0),
                 text = '',
                 text_fg = (0.0, 0.0, 0.0, 1.0),
-                text_scale = TTLocalizer.REPraceEnd/2,
+                text_scale = TTLocalizer.REPlargeLabel/2,
                 text_align = TextNode.ACenter,
                 text_font = DGG.getDefaultFont()#ToontownGlobals.getSignFont(),
                 )
-            
+
             tLabel = DirectLabel(
                 parent = frame,
                 relief = None,
                 pos = (0.9,0.0,0.0),
                 text = '--\'--\'\'--',
                 text_fg = (0.5, 0.5, 0.5, 1.0),
-                text_scale = TTLocalizer.REPraceEnd/2,
+                text_scale = TTLocalizer.REPlargeLabel/2,
                 text_font = DGG.getDefaultFont(),#ToontownGlobals.getSignFont(),
                 )
 
@@ -98,7 +98,7 @@ class RaceResultsPanel(DirectFrame):
                 pos = (1.14,0.0,0.0),
                 text = '',
                 text_fg = (0,0,0,1),
-                text_scale = TTLocalizer.REPraceEnd/2,
+                text_scale = TTLocalizer.REPlargeLabel/2,
                 text_align = TextNode.ALeft,
                 text_font = DGG.getDefaultFont(),
                 )
@@ -110,7 +110,7 @@ class RaceResultsPanel(DirectFrame):
                 pos = (1.4,0.0,0.0),
                 text = '',
                 text_fg = (0,0,0,1),
-                text_scale = TTLocalizer.REPraceEnd/2,
+                text_scale = TTLocalizer.REPlargeLabel/2,
                 text_align = TextNode.ALeft,
                 text_font = DGG.getDefaultFont(),
                 )
@@ -122,7 +122,7 @@ class RaceResultsPanel(DirectFrame):
                 pos = (1.43,0.0,0.0),
                 text = '',
                 text_fg = (1,0,0,1),
-                text_scale = TTLocalizer.REPraceEnd/2,
+                text_scale = TTLocalizer.REPlargeLabel/2,
                 text_align = TextNode.ALeft,
                 text_font = DGG.getDefaultFont(),
                 )
@@ -151,7 +151,7 @@ class RaceResultsPanel(DirectFrame):
             self.entryList[place-1][2]['text_scale']=0.036
         else:
             self.entryList[place-1][2]['text_scale']=0.04
-        
+
         # convert the time into a label displayable string
         minutes = int(time/60)
         time -= minutes*60
@@ -161,7 +161,7 @@ class RaceResultsPanel(DirectFrame):
         fraction = str(time)[2:4]
         fraction = fraction + '0'*(2-len(fraction))
         timeStr = '%d\'%s%d\'\'%s' % (minutes,padding,seconds,fraction)
-        
+
         self.entryList[place-1][3].configure(text_fg = (0.0, 0.0, 0.0, 1.0))
         self.entryList[place-1][3]['text'] = timeStr
 
@@ -199,7 +199,7 @@ class RaceResultsPanel(DirectFrame):
                 bonusSeq.append(Wait(0.5))
 
         #bonusSeq.setupPlay(startTime = 0, endTime = -1, playRate = 1,doLoop = False)
-            
+
         if(trophies):
             DirectFrame(
                 parent = headFrame,
@@ -218,7 +218,7 @@ class RaceResultsPanel(DirectFrame):
         displayPar = Parallel(bonusSeq, ticketSeq)
         displayPar.start()
         self.entryListSeqs.append(displayPar)
-        
+
 
         if not circuitPoints == []:
             self.pointsLabel.show()
@@ -310,7 +310,7 @@ class RaceResultsPanel(DirectFrame):
 
         DirectFrame.destroy(self)
 
-        
+
 class RaceWinningsPanel(DirectFrame):
     def __init__(self,race,*args,**kwargs):
         opts = {'relief':None,
@@ -326,7 +326,7 @@ class RaceWinningsPanel(DirectFrame):
             relief = None,
             pos = (0,-0.01,0),
             )
-        
+
         #########################################################
         # Start Ticket Components                               #
         #########################################################
@@ -335,7 +335,7 @@ class RaceWinningsPanel(DirectFrame):
             relief = None,
             pos = (0,0,0),
             )
-        
+
         tLabel = DirectLabel(
             parent = tFrame,
             relief = None,
@@ -346,36 +346,36 @@ class RaceWinningsPanel(DirectFrame):
             text_font = DGG.getDefaultFont()
             )
 
-            
+
         DirectLabel(
             parent = tFrame,
             relief = None,
-            pos = (TTLocalizer.REPticket_text_x,0.0,0.1),
+            pos = (TTLocalizer.REPtextPosX,0.0,0.1),
             text = TTLocalizer.KartRace_Deposit + TTLocalizer.KartRace_Colon,
             text_fg = (0.0, 0.0, 0.0, 1.0),
-            text_scale = TTLocalizer.REPraceEnd,
+            text_scale = TTLocalizer.REPlargeLabel,
             text_align = TextNode.ALeft,
             text_font = DGG.getDefaultFont()
             )
-        
+
         dLabel = DirectLabel(
             parent = tFrame,
             relief = None,
             pos = (0.05,0.0,0.1),
             text = TTLocalizer.KartRace_Zero,
             text_fg = (0.0, 0.0, 0.0, 1.0),
-            text_scale = TTLocalizer.REPraceEnd,
+            text_scale = TTLocalizer.REPlargeLabel,
             text_align = TextNode.ARight,
             text_font = DGG.getDefaultFont()
             )
-        
+
         DirectLabel(
             parent = tFrame,
             relief = None,
-            pos = (TTLocalizer.REPticket_text_x,0.0,0.0),
+            pos = (TTLocalizer.REPtextPosX,0.0,0.0),
             text = TTLocalizer.KartRace_Winnings + TTLocalizer.KartRace_Colon,
             text_fg = (0.0, 0.0, 0.0, 1.0),
-            text_scale = TTLocalizer.REPraceEnd,
+            text_scale = TTLocalizer.REPlargeLabel,
             text_align = TextNode.ALeft,
             text_font = DGG.getDefaultFont()
             )
@@ -386,7 +386,7 @@ class RaceWinningsPanel(DirectFrame):
             pos = (0.05,0.0,0.0),
             text = TTLocalizer.KartRace_Zero,
             text_fg = (0.0, 0.0, 0.0, 1.0),
-            text_scale = TTLocalizer.REPraceEnd,
+            text_scale = TTLocalizer.REPlargeLabel,
             text_align = TextNode.ARight,
             text_font = DGG.getDefaultFont()
             )
@@ -394,10 +394,10 @@ class RaceWinningsPanel(DirectFrame):
         DirectLabel(
             parent = tFrame,
             relief = None,
-            pos = (TTLocalizer.REPticket_text_x,0.0,-0.1),
+            pos = (TTLocalizer.REPtextPosX,0.0,-0.1),
             text = TTLocalizer.KartRace_Bonus + TTLocalizer.KartRace_Colon,
             text_fg = (0.0, 0.0, 0.0, 1.0),
-            text_scale = TTLocalizer.REPraceEnd,
+            text_scale = TTLocalizer.REPlargeLabel,
             text_align = TextNode.ALeft,
             text_font = DGG.getDefaultFont()
             )
@@ -408,7 +408,7 @@ class RaceWinningsPanel(DirectFrame):
             pos = (0.05,0.0,-0.1),
             text = TTLocalizer.KartRace_Zero,
             text_fg = (0.0, 0.0, 0.0, 1.0),
-            text_scale = TTLocalizer.REPraceEnd,
+            text_scale = TTLocalizer.REPlargeLabel,
             text_align = TextNode.ARight,
             text_font = DGG.getDefaultFont()
             )
@@ -416,10 +416,10 @@ class RaceWinningsPanel(DirectFrame):
         self.raceTotalLabel = DirectLabel(
             parent = tFrame,
             relief = None,
-            pos = (TTLocalizer.REPticket_text_x,0.0,-0.2),
+            pos = (TTLocalizer.REPtextPosX,0.0,-0.2),
             text = TTLocalizer.KartRace_RaceTotal + TTLocalizer.KartRace_Colon,
             text_fg = (0.0, 0.0, 0.0, 1.0),
-            text_scale = TTLocalizer.REPraceEnd,
+            text_scale = TTLocalizer.REPlargeLabel,
             text_align = TextNode.ALeft,
             text_font = DGG.getDefaultFont()
             )
@@ -427,10 +427,10 @@ class RaceWinningsPanel(DirectFrame):
         self.circuitTotalLabel = DirectLabel(
             parent = tFrame,
             relief = None,
-            pos = (TTLocalizer.REPticket_text_x,0.0,-0.2),
+            pos = (TTLocalizer.REPtextPosX,0.0,-0.2),
             text = TTLocalizer.KartRace_CircuitTotal + TTLocalizer.KartRace_Colon,
             text_fg = (0.0, 0.0, 0.0, 1.0),
-            text_scale = TTLocalizer.REPraceEnd,
+            text_scale = TTLocalizer.REPlargeLabel,
             text_align = TextNode.ALeft,
             text_font = DGG.getDefaultFont()
             )
@@ -441,7 +441,7 @@ class RaceWinningsPanel(DirectFrame):
             pos = (0.05,0.0,-0.2),
             text = TTLocalizer.KartRace_Zero,
             text_fg = (0.0, 0.0, 0.0, 1.0),
-            text_scale = TTLocalizer.REPraceEnd,
+            text_scale = TTLocalizer.REPlargeLabel,
             text_align = TextNode.ARight,
             text_font = DGG.getDefaultFont()
             )
@@ -464,7 +464,7 @@ class RaceWinningsPanel(DirectFrame):
             relief = None,
             pos = (0,0,0),
             )
-        
+
         tLabel = DirectLabel(
             parent = tFrame,
             relief = None,
@@ -474,12 +474,12 @@ class RaceWinningsPanel(DirectFrame):
             text_scale = 0.1,
             text_font = DGG.getDefaultFont()
             )
-        
+
         textFrame = DirectFrame(
             parent = tFrame,
             relief = None,
             text = '',
-            text_scale = TTLocalizer.REPraceEnd,
+            text_scale = TTLocalizer.REPlargeLabel,
             text_font = DGG.getDefaultFont(),
             text_pos = (-0.3,0.1,0),
             )
@@ -504,7 +504,7 @@ class RaceWinningsPanel(DirectFrame):
             relief = None,
             pos = (0,0,0),
             )
-        
+
         tLabel = DirectLabel(
             parent = tFrame,
             relief = None,
@@ -514,16 +514,16 @@ class RaceWinningsPanel(DirectFrame):
             text_scale = 0.1,
             text_font = DGG.getDefaultFont()
             )
-        
+
         textFrame = DirectFrame(
             parent = tFrame,
             relief = None,
             text = '',
-            text_scale = TTLocalizer.REPraceEnd,
+            text_scale = TTLocalizer.REPlargeLabel,
             text_font = DGG.getDefaultFont(),
             text_pos = (-0.3,0.1,0),
             )
-        
+
         trophyPic = DirectFrame(
             parent = tFrame,
             relief = None,
@@ -531,7 +531,7 @@ class RaceWinningsPanel(DirectFrame):
 
         self.trophyFrame = tFrame
         self.trophyComponents = (textFrame,trophyPic)
-        
+
         ##########################################################
         # Final settings                                         #
         ##########################################################
@@ -560,7 +560,7 @@ class RaceWinningsPanel(DirectFrame):
                     tempStr = ' '.join([lineStr,tokens[0]])
                 else:
                     tempStr = tokens[0]
-                                       
+
                 if textNode.calcWidth(tempStr) > maxWidth:
                     if not outStr:
                         outStr = lineStr
@@ -570,13 +570,13 @@ class RaceWinningsPanel(DirectFrame):
                 else:
                     lineStr = tempStr
                     tokens.pop(0)
-                    
+
             if lineStr:
                 if not outStr:
                     outStr = lineStr
                 else:
                     outStr = '\n'.join([outStr,lineStr])
-                
+
             return outStr
 
         ticketSeq = Sequence()
@@ -593,14 +593,14 @@ class RaceWinningsPanel(DirectFrame):
 
 
         if endOfCircuitRace:
-            #replace "Race Total: with "Circuit Total:"            
+            #replace "Race Total: with "Circuit Total:"
             self.circuitTotalLabel.unstash()
             self.raceTotalLabel.stash()
         else:
             self.circuitTotalLabel.stash()
             self.raceTotalLabel.unstash()
 
-            
+
         if ticBonus:
             ticketSeq.append(
                 Sequence(
@@ -614,7 +614,7 @@ class RaceWinningsPanel(DirectFrame):
                 Wait(3),
                 )
                 )
-                
+
 
         ticketSeq.append(
             Sequence(
@@ -664,20 +664,20 @@ class RaceWinningsPanel(DirectFrame):
         def showCorrectTrophy(trophyId):
             if hasattr(self,'trophyImage'):
                 self.trophyImage.destroy()
-                
+
             self.trophyImage = RacingTrophy(
                 level = trophyId,
                 parent = self.trophyComponents[1],
                 pos = (0.5,0,-0.25),
                 #scale = (0.75),
                 )
-            
+
             if trophyId == RaceGlobals.GrandTouring or trophyId == RaceGlobals.TotalQuals or trophyId == RaceGlobals.TotalWins:
                 scale = self.trophyImage.getScale()
                 scale = scale * 0.50
                 self.trophyImage.setScale(scale)
 
-            
+
         base.trop = self
         if trophies:
             winningsSeq.append(
@@ -698,8 +698,8 @@ class RaceWinningsPanel(DirectFrame):
                 )
 
         return (ticketSeq,winningsSeq)
-        
-   
+
+
 
 class RaceEndPanel(DirectFrame):
     def __init__(self, numRacers, race, *args,**kwargs):
@@ -710,7 +710,7 @@ class RaceEndPanel(DirectFrame):
 
         self.enabled = False
         self.race = race
-        
+
         self.results = RaceResultsPanel(
             numRacers,
             race,
@@ -718,13 +718,13 @@ class RaceEndPanel(DirectFrame):
             parent = self,
             pos = (0,0,0.525),
             )
-                                        
+
         self.winnings = RaceWinningsPanel(
             race,
             parent = self,
             pos = (0,0,-0.525),
             )
-        
+
 
         if len(self.race.circuitLoop) == 0:
             exitText = TTLocalizer.KartRace_Exit
@@ -742,7 +742,7 @@ class RaceEndPanel(DirectFrame):
             relief = None,
             scale = 2.0,
             text = exitText,
-            text_scale = TTLocalizer.REPraceExit,
+            text_scale = TTLocalizer.REPsmallLabel,
             text_pos = (0, -0.1),
             text_fg = VBase4(1, 1, 1, 1),
             pos = (1.1,0,-0.5),
@@ -750,7 +750,7 @@ class RaceEndPanel(DirectFrame):
             )
         self.closeButton.hide()
         self.disable()
-        
+
     def destroy(self):
         taskMgr.remove('showExitButton')
         try:
@@ -759,7 +759,7 @@ class RaceEndPanel(DirectFrame):
             self.seq = None
         except AttributeError:
             pass
-        
+
         DirectFrame.destroy(self)
 
     def enable(self):
@@ -769,10 +769,10 @@ class RaceEndPanel(DirectFrame):
     def disable(self):
         self.hide()
         self.enabled = False
-        
+
     def closeButtonPressed(self):
         messenger.send('leaveRace')
-        
+
     def displayRacer(self,place,entryFee,qualify,winnings,track,bonus,trophies,headFrame,name,time,circuitPoints,circuitTime):
         # place = racer's finishing place
         # entryFee = entry fee for this race in tickets
@@ -799,7 +799,7 @@ class RaceEndPanel(DirectFrame):
 
     def updateWinnings(self, place, winnings):
         self.results.updateWinnings(place, winnings)
-        
+
     def updateWinningsFromCircuit(self,place, entryFee, winnings, bonus, trophies = ()):
         print("updateWinningsFromCircuit")
         #import pdb; pdb.set_trace()
@@ -812,7 +812,7 @@ class RaceEndPanel(DirectFrame):
     def startWinningsPanel(self,entryFee,winnings,track,bonus = None,trophies = (), endOfCircuitRace = False):
         if not self.enabled:
             return
-        
+
         taskMgr.remove('showExitButton')
         try:
             if(self.seq):
@@ -850,4 +850,3 @@ class RaceEndPanel(DirectFrame):
         #self.seq.finish()
         self.closeButton.show()
         self.results.circuitFinished(placeFixup)
-        

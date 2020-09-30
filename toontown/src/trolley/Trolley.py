@@ -1,7 +1,6 @@
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.gui.DirectGui import *
-from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
@@ -9,6 +8,7 @@ from direct.fsm import StateData
 from toontown.toontowngui import TTDialog
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
+from direct.directnotify import DirectNotifyGlobal
 
 class Trolley(StateData.StateData):
     def __init__(self, safeZone, parentFSM, doneEvent):
@@ -80,7 +80,7 @@ class Trolley(StateData.StateData):
         self.rolloverButton = self.buttonModels.find(
             "**/InventoryButtonRollover")
         return
-    
+
     def unload(self):
         self.parentFSM.getStateNamed("trolley").removeChild(self.fsm)
         del self.fsm
@@ -91,7 +91,7 @@ class Trolley(StateData.StateData):
         del self.downButton
         del self.rolloverButton
         return
-        
+
     def enter(self):
         """enter(self)
         """
@@ -174,7 +174,7 @@ class Trolley(StateData.StateData):
         self.cameraBoardTrack = LerpPosHprInterval(camera, 1.5,
                                                    Point3(-35, 0, 8),
                                                    Point3(-90, 0, 0))
-        
+
         self.cameraBoardTrack.start()
         return None
 
@@ -202,7 +202,7 @@ class Trolley(StateData.StateData):
             text = TTLocalizer.TrolleyHopOff,
             text_fg = (1, 1, 0.65, 1),
             text_pos = (0, -0.23),
-            text_scale = TTLocalizer.TtrolleyHopOff,
+            text_scale = TTLocalizer.TexitButton,
             image = (self.upButton, self.downButton, self.rolloverButton),
             image_color = (1, 0, 0, 1),
             image_scale = (20, 1, 11),
@@ -260,4 +260,3 @@ class Trolley(StateData.StateData):
 
     def exitFinal(self):
         return None
-

@@ -1,7 +1,6 @@
 from pandac.PandaModules import *
 from DistributedNPCToonBase import *
 from direct.gui.DirectGui import *
-from pandac.PandaModules import *
 import NPCToons
 from toontown.toonbase import TTLocalizer
 from direct.distributed import DistributedObject
@@ -19,7 +18,7 @@ class DistributedNPCBlocker(DistributedNPCToonBase):
     def announceGenerate(self):
         #self.nametag.unmanage(base.marginManager)
         DistributedNPCToonBase.announceGenerate(self)
-        
+
     def initToonState(self):
         # We'll make all NPC toons loop their neutral cycle by
         # default.  Normally this is sent from the AI, but because the
@@ -74,7 +73,7 @@ class DistributedNPCBlocker(DistributedNPCToonBase):
     def setMovie(self, mode, npcId, avId, timestamp):
         """
         This is a message from the AI describing a movie between this NPC
-        and a Toon that has approached us. 
+        and a Toon that has approached us.
         """
         timeStamp = ClockDelta.globalClockDelta.localElapsedTime(timestamp)
 
@@ -89,7 +88,7 @@ class DistributedNPCBlocker(DistributedNPCToonBase):
 
         elif (mode == NPCToons.BLOCKER_MOVIE_START):
             assert self.notify.debug('BLOCKER_MOVIE_PLAY')
-            self.movie = QuestParser.NPCMoviePlayer("tutorial_blocker", 
+            self.movie = QuestParser.NPCMoviePlayer("tutorial_blocker",
                                                 base.localAvatar, self)
             self.movie.play()
 

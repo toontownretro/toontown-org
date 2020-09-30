@@ -21,11 +21,11 @@ class DistributedFishingTarget(DistributedNode.DistributedNode):
     the water.  They are shown as a shadow with bubbles coming up.  These
     are the things that the player 'shoots at' when fishing.
     """
-    
+
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedFishingTarget')
 
     radius = 2.5
-    
+
     def __init__(self, cr):
         DistributedNode.DistributedNode.__init__(self, cr)
         # Initialize our NodePath essense

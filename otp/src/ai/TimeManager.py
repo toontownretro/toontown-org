@@ -13,7 +13,7 @@ import time
 import os
 import sys
 import re
-        
+
 class TimeManager(DistributedObject.DistributedObject):
     """
     This DistributedObject lives on the AI and on the client side, and
@@ -167,7 +167,7 @@ class TimeManager(DistributedObject.DistributedObject):
         self.synchronize("clock error")
 
     ### Synchronization methods ###
-        
+
     def synchronize(self, description):
         """synchronize(self, string description)
 
@@ -186,7 +186,7 @@ class TimeManager(DistributedObject.DistributedObject):
         if now - self.lastAttempt < self.minWait:
             self.notify.debug("Not resyncing (too soon): %s" % (description))
             return 0
-            
+
         self.talkResult = 0
         self.thisContext = self.nextContext
         self.attemptCount = 0
@@ -198,7 +198,7 @@ class TimeManager(DistributedObject.DistributedObject):
 
         return 1
 
-    
+
     def serverTime(self, context, timestamp, timeOfDay):
         """serverTime(self, int8 context, int32 timestamp, uint32 timeOfDay)
 
@@ -221,7 +221,7 @@ class TimeManager(DistributedObject.DistributedObject):
         if context != self.thisContext:
             self.notify.info("Ignoring TimeManager response for old context %d" % (context))
             return
-        
+
         elapsed = end - self.start
         self.attemptCount += 1
         self.notify.info("Clock sync roundtrip took %0.3f ms" % (elapsed * 1000.0))
@@ -246,11 +246,11 @@ class TimeManager(DistributedObject.DistributedObject):
             # This should change to be more generic
             # maybe self.cr.localAv
             base.localAvatar.setChatAbsolute("latency %0.0f ms, sync ±%0.0f ms" % (elapsed * 1000.0, globalClockDelta.getUncertainty() * 1000.0), CFSpeech | CFTimeout)
-        
+
         self._gotFirstTimeSync = True
         messenger.send("gotTimeSync")
 
-        
+
     def setDisconnectReason(self, disconnectCode):
         """setDisconnectReason(self, uint8 disconnectCode)
 
@@ -261,7 +261,7 @@ class TimeManager(DistributedObject.DistributedObject):
         """
         self.notify.info("Client disconnect reason %s." % (disconnectCode))
         self.sendUpdate("setDisconnectReason", [disconnectCode])
-        
+
     def setExceptionInfo(self):
         """
         In the case of the client leaving for a Python exception, we
@@ -312,15 +312,15 @@ class TimeManager(DistributedObject.DistributedObject):
             di.getCpuVersionInformation(), di.getCpuBrandIndex(),
             '%0.03f,%0.03f' % cpuSpeed,
             '%d,%d' % (numCpuCores, numLogicalCpus))
-        
+
         print "cpu info: %s" % (info)
         self.sendUpdate("setCpuInfo", [info, cacheStatus])
-            
-    
+
+
     def setFrameRateInterval(self, frameRateInterval):
         """ This message is called at startup time, to start sending
         frame rate reports. """
-        
+
         if frameRateInterval == 0:
             return
 
@@ -341,7 +341,7 @@ class TimeManager(DistributedObject.DistributedObject):
         taskMgr.remove('frameRateMonitor')
         taskMgr.doMethodLater(frameRateInterval,
                               self.frameRateMonitor, 'frameRateMonitor')
-        
+
     def frameRateMonitor(self, task):
         """ This method is called every once in a while to report the
         user's average frame rate to the server. """
@@ -384,7 +384,7 @@ class TimeManager(DistributedObject.DistributedObject):
 
             numCpuCores = di.getNumCpuCores()
             numLogicalCpus = di.getNumLogicalCpus()
-        
+
             apiName = base.pipe.getInterfaceName()
 
 
@@ -401,7 +401,7 @@ class TimeManager(DistributedObject.DistributedObject):
             numCpuCores, numLogicalCpus, apiName)
 
         return task.again
-        
+
     def d_setFrameRate(self, fps, deviation, numAvs,
                        locationCode, timeInLocation, timeInGame,
                        gameOptionsCode, vendorId, deviceId,
@@ -482,4 +482,11 @@ class TimeManager(DistributedObject.DistributedObject):
                     self.notify.debug("getMacOsInfo %s" % str(e))
         self.notify.debug('getMacOsInfo returning %s' % str(result))
         return result
-                
+
+    def checkAvOnDistrict(self, av, context):
+        self.sendUpdate('checkAvOnDistrict', [context, av.doId])
+
+    def checkAvOnDistrictResult(self, context, avId, present):
+        av = self.cr.getDo(avId)
+        if av:
+            av._zombieCheckResult(context, present)

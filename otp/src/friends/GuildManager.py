@@ -6,6 +6,7 @@ from otp.otpbase import OTPGlobals
 from otp.avatar.AvatarHandle import AvatarHandle
 from otp.ai import AIInterestHandles
 
+GUILDRANK_VETERAN = 4
 GUILDRANK_GM = 3
 GUILDRANK_OFFICER = 2
 GUILDRANK_MEMBER = 1
@@ -19,19 +20,19 @@ class GuildMemberInfo(AvatarHandle):
         self.rank = rank
         self.bandId = bandId
         self.onlineYesNo = isOnline
-        
+
     def getName(self):
         return self.name
 
     def getRank(self):
         return self.rank
-    
+
     def getBandId(self):
         return self.bandId
 
     def isOnline(self):
         return self.onlineYesNo
-    
+
     def isUnderstandable(self):
         # This is for compatibility with the ClientRepository's
         # identifyFriend() function
@@ -79,7 +80,7 @@ class GuildManager(DistributedObjectGlobal):
     def _allowMemberList(self,task):
         self.spamGateOpen = True
         return task.done
-        
+
     # Functions called by the client
     def memberList(self):
         if self.spamGateOpen:
@@ -90,7 +91,7 @@ class GuildManager(DistributedObjectGlobal):
     def createGuild(self):
         # Make sure to decline any other guild invitations
         messenger.send("declineGuildInvitation")
-        
+
         self.sendUpdate("createGuild", [])
 
     def setWantName(self, newName):
@@ -119,12 +120,12 @@ class GuildManager(DistributedObjectGlobal):
 
     def sendTalk(self,msgText,chatFlags=0):
         self.sendUpdate("setTalkGroup",[0,0,"",msgText,[],0])
-        
+
     def setTalkGroup(self, fromAv, fromAC, avatarName, chat, mods, flags):
         if hasattr(base, "localAvatar"):
             message, scrubbed = localAvatar.scrubTalk(chat, mods)
             base.talkAssistant.receiveGuildTalk(fromAv, fromAC, avatarName, message, scrubbed)
-        
+
 
     def sendSC(self,msgIndex):
         self.sendUpdate("sendSC",[msgIndex])
@@ -148,7 +149,7 @@ class GuildManager(DistributedObjectGlobal):
 
     def getBandId(self, avId):
         return self.id2BandId.get(avId)
-    
+
     def getMemberInfo(self, avId):
         if self.isInGuild(avId):
             return GuildMemberInfo(self.id2Name[avId],
@@ -169,7 +170,7 @@ class GuildManager(DistributedObjectGlobal):
             myRank = localAvatar.getGuildRank()
             hisRank = self.id2Rank[avId]
 
-            canpromote = False 
+            canpromote = False
             candemote = False
             cankick = False
 
@@ -185,7 +186,7 @@ class GuildManager(DistributedObjectGlobal):
             return (canpromote, candemote, cankick)
         else:
             return None
-        
+
     def updateTokenRValue(self, tokenString, rValue):
         # Send this token and redeem value up to the server.
         # The token in tokenString will be assigned the rValue
@@ -234,7 +235,7 @@ class GuildManager(DistributedObjectGlobal):
         self.id2Name = {}
         self.id2Rank = {}
         self.id2BandId = {}
-        
+
         # Pass the member list to the guild GUI for use
         for guy in memberlist:
             id = guy[0]
@@ -259,12 +260,12 @@ class GuildManager(DistributedObjectGlobal):
                         self.handleLogout)
         else:
             self.ignore(self.cr.StopVisibilityEvent)
-        
-        if hasattr(base, "localAvatar"):    
+
+        if hasattr(base, "localAvatar"):
             base.localAvatar.guiMgr.guildPage.receiveMembers(memberlist)
         messenger.send('guildMemberUpdated', sentArgs = [localAvatar.doId])
-        
-        
+
+
     def guildStatusUpdate(self, guildId, guildName, guildRank):
         if hasattr(base, "localAvatar"):
             base.localAvatar.guildStatusUpdate(guildId, guildName, guildRank)
@@ -273,7 +274,7 @@ class GuildManager(DistributedObjectGlobal):
     def guildNameReject(self, guildId):
         if hasattr(base, "localAvatar"):
             base.localAvatar.guildNameReject(guildId)
-        
+
     def guildNameChange(self, guildName, changeStatus):
         if hasattr(base, "localAvatar"):
             base.localAvatar.guildNameChange(guildName, changeStatus)
@@ -304,7 +305,7 @@ class GuildManager(DistributedObjectGlobal):
     def rejectInvite(self,avatarId,reason):
         # print "GM rejectInvite to %d because of %d" % (avatarId,reason)
         pass
-    
+
 
 
 
@@ -345,7 +346,7 @@ class GuildManager(DistributedObjectGlobal):
             return
         # Send message so guild guis can pick up the update
         messenger.send("guildMemberOnlineStatus", [avatarId, 1])
-        
+
     def recvAvatarOffline(self,avatarId,avatarName):
         # Print out a message in the chat log, update the panel we're looking at, play a tick sound, etc!
         # Guard against the case where the localAvatar just logged out and he is hearing his own
@@ -369,7 +370,7 @@ class GuildManager(DistributedObjectGlobal):
         if hasattr(base, "localAvatar"):
             base.localAvatar.guiMgr.guildPage.addMember(memberInfo)
         messenger.send('guildMemberUpdated', sentArgs = [avatarId])
-        
+
     def recvMemberRemoved(self, avatarId):
         if avatarId == localAvatar.doId:
             self.clearMembers()
@@ -381,17 +382,17 @@ class GuildManager(DistributedObjectGlobal):
             if hasattr(base, 'localAvatar'):
                 base.localAvatar.guiMgr.guildPage.removeMember(avatarId)
         messenger.send('guildMemberUpdated', sentArgs = [avatarId])
-        
+
     def recvMemberUpdateRank(self, avatarId, rank):
         self.id2Rank[avatarId] = rank
         if hasattr(base, 'localAvatar') and base.localAvatar.guiMgr:
             base.localAvatar.guiMgr.guildPage.updateGuildMemberRank(avatarId, rank)
         messenger.send('guildMemberUpdated', sentArgs = [avatarId])
-        
+
     def recvMemberUpdateBandId(self, avatarId, bandManagerId, bandId):
         self.id2BandId[avatarId] = (bandManagerId, bandId)
         messenger.send('guildMemberUpdated', sentArgs = [avatarId])
-        
+
     def recvTokenInviteValue(self, tokenValue, preExistPerm):
         # print "Token Received from server: %s" % (tokenValue)
         # if tokenValue == 'TOO_MANY_TOKENS':
@@ -429,7 +430,7 @@ class GuildManager(DistributedObjectGlobal):
                 base.localAvatar.guiMgr.guildPage.receivePermTokenValue(None)
             else:
                 base.localAvatar.guiMgr.guildPage.receivePermTokenValue(token)
-            
+
     def requestEmailNotificationPref(self):
         # Request that the guild email notification prefs are sent down
         # to the client
@@ -490,7 +491,7 @@ class GuildManager(DistributedObjectGlobal):
     def teleportResponse(self, responderId, available,
                          shardId, instanceDoId, areaDoId):
         if self.cr.teleportMgr:
-            self.cr.teleportMgr.handleAvatarTeleportResponse(responderId, available, 
+            self.cr.teleportMgr.handleAvatarTeleportResponse(responderId, available,
                                                              shardId, instanceDoId, areaDoId,
                                                              )
 

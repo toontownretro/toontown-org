@@ -18,7 +18,9 @@ class DGHood(ToonHood.ToonHood):
         # Dictionary which holds holiday specific lists of Storage DNA Files
         # Keyed off of the News Manager holiday IDs stored in ToontownGlobals
         self.holidayStorageDNADict = {WINTER_DECORATIONS : ['phase_8/dna/winter_storage_DG.dna'],
-                                      HALLOWEEN_PROPS : ['phase_8/dna/halloween_props_storage_DG.dna']}
+                                      WACKY_WINTER_DECORATIONS: ['phase_8/dna/winter_storage_DG.dna'],
+                                      HALLOWEEN_PROPS : ['phase_8/dna/halloween_props_storage_DG.dna'],
+                                      SPOOKY_PROPS: ['phase_8/dna/halloween_props_storage_DG.dna']}
         # Use TT sky until we get a real one
         self.skyFile = "phase_3.5/models/props/TT_sky"
         self.spookySkyFile = "phase_3.5/models/props/BR_sky"
@@ -27,14 +29,14 @@ class DGHood(ToonHood.ToonHood):
     def load(self):
         ToonHood.ToonHood.load(self)
         self.parentFSM.getStateNamed("DGHood").addChild(self.fsm)
-        
+
     def unload(self):
         self.parentFSM.getStateNamed("DGHood").removeChild(self.fsm)
         ToonHood.ToonHood.unload(self)
-        
+
     def enter(self, *args):
         ToonHood.ToonHood.enter(self, *args)
-        
+
     def exit(self):
         ToonHood.ToonHood.exit(self)
 
@@ -42,13 +44,13 @@ class DGHood(ToonHood.ToonHood):
         return SkyUtil.cloudSkyTrack(task)
 
     def startSky(self):
-        
+
         # we have the wrong sky; load in the regular sky
         if not (self.sky.getTag("sky") == "Regular"):
             self.endSpookySky()
-            
+
         SkyUtil.startCloudSky(self)
-        
+
     def startSpookySky(self):
         if hasattr(self, "sky") and self.sky:
             self.stopSky()

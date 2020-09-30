@@ -7,6 +7,8 @@
 from toontown.suit import SuitDNA
 import types
 from toontown.toonbase import TTLocalizer
+from direct.showbase import PythonUtil
+from otp.otpbase import OTPGlobals
 
 # how many parts are required for the different depts
 PartsPerSuit = ( 17, 14, 12, 10 )
@@ -269,4 +271,3 @@ def dept2deptIndex(dept):
     if type(dept) == types.StringType:
         dept = SuitDNA.suitDepts.index(dept)
     return dept
-

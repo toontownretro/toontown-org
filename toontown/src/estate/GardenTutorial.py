@@ -15,7 +15,7 @@ class GardenTutorial(DirectFrame, FSM.FSM):
         self.doneEvent = doneEvent
         self.callback = callback
         self.setStateArray(["Page1", "Page2", "Page3", "Page4", "Page5"])
-        
+
         # initialize our base class.
         DirectFrame.__init__(self,
                              pos = (0.0, 0.0, 0.0),
@@ -73,10 +73,10 @@ class GardenTutorial(DirectFrame, FSM.FSM):
                                   scale = 0.7,
                                   pos = (-0.51, -0.1, 0.05),
                                   )
-        self.iPage5.hide()        
+        self.iPage5.hide()
 
-        
-        
+
+
         # Create some buttons.
         buttons = loader.loadModel('phase_3/models/gui/dialog_box_buttons_gui')
         gui = loader.loadModel('phase_3.5/models/gui/friendslist_gui')
@@ -134,7 +134,7 @@ class GardenTutorial(DirectFrame, FSM.FSM):
 
         curState = base.cr.playGame.getPlace().getState()
         self.notify.debug('Estate.getState() == %s' % curState)
-        
+
         self.request("Page1")
 
     def enterPage1(self, *args):
@@ -153,7 +153,7 @@ class GardenTutorial(DirectFrame, FSM.FSM):
         self.title['text'] = TTLocalizer.GardenTutorialTitle2,
         self['text'] = TTLocalizer.GardenTutorialPage2
         self['text_pos'] = (-0.27, 0.16)
-        self['text_wordwrap'] = TTLocalizer.GardenTutorialPage2Wordwrap
+        self['text_wordwrap'] = TTLocalizer.GTenterPage2Wordwrap
         self.iPage2.show()
 
     def exitPage2(self, *args):
@@ -173,7 +173,7 @@ class GardenTutorial(DirectFrame, FSM.FSM):
         self.title['text'] = TTLocalizer.GardenTutorialTitle4,
         self['text'] = TTLocalizer.GardenTutorialPage4
         self['text_pos'] = (0.0, 0.19)
-        self['text_wordwrap'] = TTLocalizer.GardenTutorialPage4Wordwrap
+        self['text_wordwrap'] = TTLocalizer.GTenterPage4Wordwrap
         self.iPage4.show()
 
     def exitPage4(self, *args):
@@ -191,17 +191,14 @@ class GardenTutorial(DirectFrame, FSM.FSM):
     def exitPage5(self, *args):
         self.bNext['state'] = DGG.NORMAL
         self.iPage5.hide()
-        self.bQuit.hide()        
+        self.bQuit.hide()
 
 
     def __handleQuit(self):
         #show the shtiker book
-        self.notify.debug('garden tutorial detectedGardenPlotDone')        
-        base.cr.playGame.getPlace().detectedGardenPlotDone()        
+        self.notify.debug('garden tutorial detectedGardenPlotDone')
+        base.cr.playGame.getPlace().detectedGardenPlotDone()
         if self.callback:
             self.callback()
         else:
             messenger.send(self.doneEvent)
-
-
-        

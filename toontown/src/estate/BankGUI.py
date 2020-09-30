@@ -34,8 +34,12 @@ class BankGui(DirectFrame):
         bankModel = loader.loadModel("phase_5.5/models/estate/jellybeanBank.bam")
         # If we set this on the entire bank, the billboard jellybeans goes away
         # Let's just set it on the pig, the rest of the bank looks ok
-        bankModel.find("**/pig").setDepthWrite(1)
-        bankModel.find("**/pig").setDepthTest(1)
+        #bankModel.find("**/pig").setDepthWrite(0)
+        #bankModel.find("**/pig").setDepthTest(0)
+        bankModel.setDepthWrite(1)
+        bankModel.setDepthTest(1)
+        bankModel.find("**/jellybeans").setDepthWrite(0)
+        bankModel.find("**/jellybeans").setDepthTest(0)
 
         # Init buttons
         okImageList = (buttons.find('**/ChtBx_OKBtn_UP'),
@@ -174,7 +178,7 @@ class BankGui(DirectFrame):
         self.__transactionAmount = min(self.__transactionAmount, maxBankMoney - bankMoney)
         self.__transactionAmount = -min(-self.__transactionAmount, maxJarMoney - jarMoney)
         self.__transactionAmount = -min(-self.__transactionAmount, bankMoney)
-        
+
         # Compute the new money for jar and bank
         newJarMoney = (jarMoney - self.__transactionAmount)
         newBankMoney = (bankMoney + self.__transactionAmount)
@@ -214,7 +218,7 @@ class BankGui(DirectFrame):
     def __depositButtonUp(self, event):
         messenger.send('wakeup')
         taskMgr.remove(self.taskName("runCounter"))
-        
+
     def __depositButtonDown(self, event):
         messenger.send('wakeup')
         task = Task(self.__runCounter)
@@ -235,7 +239,7 @@ class BankGui(DirectFrame):
         task.delayTime = 0.4
         task.prevTime = 0.0
         task.delta = -1
-        hitLimit, jar, bank, trans = self.__updateTransaction(task.delta)        
+        hitLimit, jar, bank, trans = self.__updateTransaction(task.delta)
         if not hitLimit:
             taskMgr.add(task, self.taskName("runCounter"))
 
@@ -244,6 +248,3 @@ class BankGui(DirectFrame):
 
     def __bankMoneyChange(self, bankMoney):
         self.__updateTransaction(0)
-        
-
-

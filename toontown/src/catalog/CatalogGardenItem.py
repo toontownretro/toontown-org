@@ -4,6 +4,8 @@ from toontown.toonbase import TTLocalizer
 from otp.otpbase import OTPLocalizer
 from direct.interval.IntervalGlobal import *
 from toontown.estate import GardenGlobals
+from direct.actor import Actor
+from pandac.PandaModules import NodePath
 
 class CatalogGardenItem(CatalogItem.CatalogItem):
     """
@@ -33,7 +35,7 @@ class CatalogGardenItem(CatalogItem.CatalogItem):
         # has already bought his limit on this item.
         if self in avatar.onOrder or self in avatar.mailboxContents or self in avatar.onGiftOrder \
            or self in avatar.awardMailboxContents or self in avatar.onAwardOrder:
-            return 1        
+            return 1
         return 0
 
     def getAcceptItemErrorText(self, retcode):
@@ -72,19 +74,38 @@ class CatalogGardenItem(CatalogItem.CatalogItem):
 
     def getPicture(self, avatar):
         photoModel = GardenGlobals.Specials[self.gardenIndex]['photoModel']
-        beanJar = loader.loadModel(photoModel)
-        frame = self.makeFrame()
-        beanJar.reparentTo(frame)
+        if GardenGlobals.Specials[self.gardenIndex].has_key('photoAnimation'):
+            modelPath = photoModel + GardenGlobals.Specials[self.gardenIndex]['photoAnimation'][0]
+            animationName = GardenGlobals.Specials[self.gardenIndex]['photoAnimation'][1]
+            animationPath = photoModel + animationName
+            self.model = Actor.Actor()
+            self.model.loadModel(modelPath)
+            self.model.loadAnims(dict([[animationName, animationPath]]))
+            frame, ival = self.makeFrameModel(self.model, 0)
+            ival = ActorInterval(self.model, animationName, 2.0)
+            photoPos = GardenGlobals.Specials[self.gardenIndex]['photoPos']
+            frame.setPos(photoPos)
+            photoScale = GardenGlobals.Specials[self.gardenIndex]['photoScale']
+            self.model.setScale(photoScale)
+            self.hasPicture = True
+            return (frame, ival)
+        else:
+            self.model = loader.loadModel(photoModel)
+            frame = self.makeFrame()
+            self.model.reparentTo(frame)
+            photoPos = GardenGlobals.Specials[self.gardenIndex]['photoPos']
+            self.model.setPos(*photoPos)
+            photoScale = GardenGlobals.Specials[self.gardenIndex]['photoScale']
+            self.model.setScale(photoScale)
+            self.hasPicture = True
+            return (frame, None)
+        return None
 
-        photoPos = GardenGlobals.Specials[self.gardenIndex]['photoPos']
-        beanJar.setPos(*photoPos)
-        photoScale = GardenGlobals.Specials[self.gardenIndex]['photoScale']
-        #beanJar.setScale(2.5)
-        beanJar.setScale(photoScale)
-
-        assert (not self.hasPicture)
-        self.hasPicture=True
-        return (frame, None)
+    def cleanupPicture(self):
+        CatalogItem.CatalogItem.cleanupPicture(self)
+        self.model.detachNode()
+        self.model = None
+        return
 
     def output(self, store = ~0):
         return "CatalogGardenItem(%s%s)" % (
@@ -120,7 +141,7 @@ class CatalogGardenItem(CatalogItem.CatalogItem):
         """
         retval = CatalogItem.CatalogItem.getRequestPurchaseErrorText(self,retcode)
         origText =retval
-        
+
         if retval == TTLocalizer.CatalogPurchaseItemAvailable or \
            retval == TTLocalizer.CatalogPurchaseItemOnOrder:
             #now lets tell them what other beans to plant it with

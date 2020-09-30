@@ -37,7 +37,7 @@ class FishSellGUI(DirectFrame):
         newTankFish = base.localAvatar.fishTank.getFish()
         self.picker.update(newTankFish)
         self.picker.show()
-        
+
         # Init buttons
         buttons = loader.loadModel('phase_3/models/gui/dialog_box_buttons_gui')
         okImageList = (buttons.find('**/ChtBx_OKBtn_UP'),
@@ -62,7 +62,7 @@ class FishSellGUI(DirectFrame):
             image = okImageList,
             pos = (0.6, 0, -0.58),
             text = TTLocalizer.FishGuiOk,
-            text_scale = TTLocalizer.FSGokButton,
+            text_scale = TTLocalizer.FSGUIokButton,
             text_pos = (0,-0.1),
             command = self.__sellFish,
             )
@@ -81,7 +81,7 @@ class FishSellGUI(DirectFrame):
 
     def __sellFish(self):
         messenger.send(self.doneEvent, [1])
-    
+
     def __updateFishValue(self):
         fishTank = base.localAvatar.getFishTank()
         num = len(fishTank)
@@ -89,5 +89,3 @@ class FishSellGUI(DirectFrame):
         self['text'] = TTLocalizer.FishTankValue % { "name": base.localAvatar.getName(),
                                                    "num": num, "value":value }
         self.setText()
-        
-        

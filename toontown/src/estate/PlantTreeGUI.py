@@ -3,6 +3,8 @@ from direct.showbase.ShowBase import *
 from toontown.toonbase import TTLocalizer
 import string
 from direct.fsm import StateData
+from toontown.toonbase.ToontownBattleGlobals import gagIsPaidOnly
+from toontown.toontowngui.TeaserPanel import TeaserPanel
 
 class PlantTreeGUI(StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('PlantTreeGUI')
@@ -25,7 +27,7 @@ class PlantTreeGUI(StateData.StateData):
         # Put the inventory away
         base.localAvatar.inventory.setActivateMode(self.oldActivateMode)
         base.localAvatar.inventory.hide()
-    
+
     def __handleInventory(self, track, level):
         assert self.notify.debugStateCall(self)
         if (base.localAvatar.inventory.numItem(track, level) > 0):
